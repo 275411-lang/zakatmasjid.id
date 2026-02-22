@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masjid Penerima Zakat | Zakat Masjid</title>
+  <link rel="stylesheet" href="asset/css/style.css">
+  <link rel="stylesheet" href="asset/css/masjid.css">
+
+  <style>
+    /* ── Modal Overlay ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      backdrop-filter: blur(3px);
+      z-index: 2000;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 1.5rem 1rem;
+      overflow-y: auto;
+    }
+    .modal-overlay.open { display: flex; }
+
+    /* ── Modal Box ── */
+    .modal-box {
+      background: white;
+      border-radius: var(--radius-2xl);
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,.2);
+      animation: modalIn .28s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes modalIn {
+      from { transform: translateY(24px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    /* ── Modal Header ── */
+    .modal-head {
+      padding: var(--space-xl);
+      background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));
+      border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-md);
+      position: relative;
+      overflow: hidden;
+    }
+    .modal-head-left { position: relative; z-index: 1; }
+    .modal-head-icon { font-size: 2rem; display: block; margin-bottom: .25rem; }
+    .modal-head-name {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      font-weight: 700;
+      color: white;
+    }
+    .modal-head-addr {
+      font-size: var(--text-sm);
+      color: rgba(255,255,255,.78);
+      margin-top: .2rem;
+      display: block;
+    }
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      color: white;
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+      flex-shrink: 0;
+      position: relative; z-index: 10;
+      margin-top: 4px;
+    }
+    .modal-close-btn:hover { background: rgba(255,255,255,.15); }
+
+    /* ── Modal Body ── */
+    .modal-body { padding: var(--space-xl); display: flex; flex-direction: column; gap: var(--space-xl); }
+
+    .modal-section-title {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--neutral-400);
+      margin-bottom: var(--space-sm);
+    }
+
+    /* Info grid */
+    .modal-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-sm);
+    }
+    .modal-info-item {
+      background: var(--neutral-50);
+      border: 1px solid var(--neutral-200);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+    }
+    .modal-info-item-icon { font-size: 1.25rem; display: block; margin-bottom: .25rem; }
+    .modal-info-item-label { font-size: var(--text-xs); color: var(--neutral-400); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+    .modal-info-item-value { font-size: var(--text-sm); font-weight: 700; color: var(--neutral-800); margin-top: .2rem; }
+
+    /* Schedule */
+    .modal-schedule {
+      background: var(--neutral-50);
+      border: 1px solid var(--neutral-200);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .modal-schedule-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
+      font-size: var(--text-sm);
+      color: var(--neutral-700);
+    }
+    .modal-schedule-row + .modal-schedule-row { border-top: 1px solid var(--neutral-200); }
+    .modal-schedule-row .sch-icon { font-size: 1rem; width: 24px; text-align: center; flex-shrink: 0; }
+    .modal-schedule-row strong { color: var(--primary-green-dark); }
+
+    /* Nishab */
+    .modal-nishab {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .modal-nishab-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-md) var(--space-lg);
+      font-size: var(--text-sm);
+    }
+    .modal-nishab-row + .modal-nishab-row { border-top: 1px solid #fde68a; }
+    .modal-nishab-label { color: var(--neutral-600); }
+    .modal-nishab-value { font-weight: 700; color: var(--neutral-800); }
+
+    /* Payment */
+    .modal-payments { display: flex; flex-direction: column; gap: var(--space-sm); }
+    .modal-payment-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
+      background: var(--neutral-50);
+      border: 1px solid var(--neutral-200);
+      border-radius: var(--radius-lg);
+      transition: border-color .2s, background .2s;
+    }
+    .modal-payment-item:hover { border-color: var(--primary-green); background: #f0fdf4; }
+    .modal-payment-icon {
+      width: 38px; height: 38px;
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .pi-rice   { background: #dcfce7; }
+    .pi-cash   { background: #fffbeb; }
+    .pi-qris   { background: #fee2e2; }
+    .pi-bank   { background: #eff6ff; }
+    .modal-payment-info { flex: 1; }
+    .modal-payment-name { font-weight: 700; font-size: var(--text-sm); color: var(--neutral-800); }
+    .modal-payment-desc { font-size: var(--text-xs); color: var(--neutral-500); margin-top: .1rem; }
+
+    /* Contact */
+    .modal-contacts { display: flex; gap: var(--space-sm); }
+    .modal-contact-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .3rem;
+      padding: var(--space-md);
+      background: var(--neutral-50);
+      border: 1px solid var(--neutral-200);
+      border-radius: var(--radius-lg);
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+    .modal-contact-btn:hover { border-color: var(--primary-green); background: #f0fdf4; }
+    .modal-contact-btn-icon { font-size: 1.4rem; }
+    .modal-contact-btn-label { font-size: var(--text-xs); color: var(--neutral-600); font-weight: 600; }
+
+    /* Modal Footer */
+    .modal-foot {
+      padding: var(--space-lg) var(--space-xl);
+      border-top: 1px solid var(--neutral-200);
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    /* Scrollbar */
+    .modal-box::-webkit-scrollbar { width: 5px; }
+    .modal-box::-webkit-scrollbar-thumb { background: var(--neutral-200); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="main-header">
+    <div class="container">
+      <div class="header-content">
+        <a href="dashboard.html" class="logo">
+          <span class="logo-icon">🕌</span>
+          <h1>Zakat Masjid</h1>
+        </a>
+
+        <!-- Hamburger Menu Button -->
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <nav class="main-nav" id="mainNav">
+          <a href="dashboard.html" class="nav-link">Dashboard</a>
+          <a href="Kalkulator.html" class="nav-link">Hitung Zakat</a>
+          <a href="masjid.html" class="nav-link active">Masjid</a>
+          <a href="Edukasi.html" class="nav-link">Panduan</a>
+        </nav>
+
+        <button class="btn-profile" aria-label="Profil">
+          <span class="avatar-small">AM</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Nav Overlay for Mobile -->
+  <div class="nav-overlay" id="navOverlay"></div>
+
+  <!-- MAIN -->
+  <main class="dashboard-main">
+    <div class="container">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Masjid Penerima Zakat</h1>
+          <p class="page-subtitle">Temukan masjid terdekat &amp; selesaikan pembayaran zakat Anda</p>
+        </div>
+        <button class="btn btn-primary">
+          <span class="btn-icon">📍</span> Cari Terdekat
+        </button>
+      </div>
+
+      <!-- Summary Bar -->
+      <div class="masjid-summary-bar">
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-green">🕌</div>
+          <div class="stat-content">
+            <span class="stat-value">12</span>
+            <span class="stat-label">Total Masjid</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-blue">✅</div>
+          <div class="stat-content">
+            <span class="stat-value">9</span>
+            <span class="stat-label">Masjid Aktif</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-gold">📦</div>
+          <div class="stat-content">
+            <span class="stat-value">3</span>
+            <span class="stat-label">Terima Beras</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toolbar : Search + Filter Pills -->
+      <div class="masjid-toolbar">
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="search-input" placeholder="Cari masjid atau alamat…">
+        </div>
+        <div class="filter-pills">
+          <button class="pill active">Semua</button>
+          <button class="pill">Beras</button>
+          <button class="pill">Uang</button>
+          <button class="pill">Terdekat</button>
+        </div>
+      </div>
+
+      <!-- Masjid Grid -->
+      <div class="masjid-grid">
+
+        <!-- Card 1 – Al-Falah -->
+        <article class="card masjid-card">
+          <div class="card-body">
+            <div class="masjid-card-header">
+              <div class="masjid-thumbnail">🕌</div>
+              <div>
+                <h3 class="masjid-card-name">Masjid Al-Falah</h3>
+                <span class="masjid-card-loc">📍 Jl. Merdeka No. 10, Balikpapan</span>
+              </div>
+            </div>
+            <div class="masjid-info-rows">
+              <div class="masjid-info-row">
+                <span class="row-label">📅 Jadwal</span>
+                <span class="row-value">10 – 28 Ramadan</span>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">📦 Jenis Zakat</span>
+                <div class="zakat-tags">
+                  <span class="zakat-tag">🌾 Beras</span>
+                  <span class="zakat-tag tag-gold">💰 Uang</span>
+                </div>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">👥 Penerima</span>
+                <span class="row-value">148 mustahik</span>
+              </div>
+            </div>
+            <div class="masjid-card-footer">
+              <span class="distance-badge">📍 1.2 km dari Anda</span>
+              <button class="btn btn-secondary btn-sm" onclick="openModal('alfalah')">Lihat Detail</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2 – At-Taqwa -->
+        <article class="card masjid-card">
+          <div class="card-body">
+            <div class="masjid-card-header">
+              <div class="masjid-thumbnail">🕌</div>
+              <div>
+                <h3 class="masjid-card-name">Masjid At-Taqwa</h3>
+                <span class="masjid-card-loc">📍 Jl. Pendidikan No. 5, Balikpapan</span>
+              </div>
+            </div>
+            <div class="masjid-info-rows">
+              <div class="masjid-info-row">
+                <span class="row-label">📅 Jadwal</span>
+                <span class="row-value">12 – 29 Ramadan</span>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">📦 Jenis Zakat</span>
+                <div class="zakat-tags">
+                  <span class="zakat-tag tag-gold">💰 Uang</span>
+                </div>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">👥 Penerima</span>
+                <span class="row-value">92 mustahik</span>
+              </div>
+            </div>
+            <div class="masjid-card-footer">
+              <span class="distance-badge">📍 3.7 km dari Anda</span>
+              <button class="btn btn-secondary btn-sm" onclick="openModal('attaqwa')">Lihat Detail</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3 – Nurul Iman -->
+        <article class="card masjid-card">
+          <div class="card-body">
+            <div class="masjid-card-header">
+              <div class="masjid-thumbnail">🕌</div>
+              <div>
+                <h3 class="masjid-card-name">Masjid Nurul Iman</h3>
+                <span class="masjid-card-loc">📍 Jl. Harmoni No. 3, Balikpapan</span>
+              </div>
+            </div>
+            <div class="masjid-info-rows">
+              <div class="masjid-info-row">
+                <span class="row-label">📅 Jadwal</span>
+                <span class="row-value">15 – 28 Ramadan</span>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">📦 Jenis Zakat</span>
+                <div class="zakat-tags">
+                  <span class="zakat-tag">🌾 Beras</span>
+                </div>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">👥 Penerima</span>
+                <span class="row-value">67 mustahik</span>
+              </div>
+            </div>
+            <div class="masjid-card-footer">
+              <span class="distance-badge">📍 5.1 km dari Anda</span>
+              <button class="btn btn-secondary btn-sm" onclick="openModal('nuruliman')">Lihat Detail</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 4 – Baitul Haq -->
+        <article class="card masjid-card">
+          <div class="card-body">
+            <div class="masjid-card-header">
+              <div class="masjid-thumbnail">🕌</div>
+              <div>
+                <h3 class="masjid-card-name">Masjid Baitul Haq</h3>
+                <span class="masjid-card-loc">📍 Jl. Sudirman No. 22, Balikpapan</span>
+              </div>
+            </div>
+            <div class="masjid-info-rows">
+              <div class="masjid-info-row">
+                <span class="row-label">📅 Jadwal</span>
+                <span class="row-value">8 – 30 Ramadan</span>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">📦 Jenis Zakat</span>
+                <div class="zakat-tags">
+                  <span class="zakat-tag">🌾 Beras</span>
+                  <span class="zakat-tag tag-gold">💰 Uang</span>
+                </div>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">👥 Penerima</span>
+                <span class="row-value">201 mustahik</span>
+              </div>
+            </div>
+            <div class="masjid-card-footer">
+              <span class="distance-badge">📍 2.4 km dari Anda</span>
+              <button class="btn btn-secondary btn-sm" onclick="openModal('baitulhaq')">Lihat Detail</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 5 – Ar-Rahman -->
+        <article class="card masjid-card">
+          <div class="card-body">
+            <div class="masjid-card-header">
+              <div class="masjid-thumbnail">🕌</div>
+              <div>
+                <h3 class="masjid-card-name">Masjid Ar-Rahman</h3>
+                <span class="masjid-card-loc">📍 Jl. Ahmad Yani No. 7, Balikpapan</span>
+              </div>
+            </div>
+            <div class="masjid-info-rows">
+              <div class="masjid-info-row">
+                <span class="row-label">📅 Jadwal</span>
+                <span class="row-value">11 – 27 Ramadan</span>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">📦 Jenis Zakat</span>
+                <div class="zakat-tags">
+                  <span class="zakat-tag tag-gold">💰 Uang</span>
+                </div>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">👥 Penerima</span>
+                <span class="row-value">55 mustahik</span>
+              </div>
+            </div>
+            <div class="masjid-card-footer">
+              <span class="distance-badge">📍 4.8 km dari Anda</span>
+              <button class="btn btn-secondary btn-sm" onclick="openModal('arrahman')">Lihat Detail</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 6 – Istiqlal Baru -->
+        <article class="card masjid-card">
+          <div class="card-body">
+            <div class="masjid-card-header">
+              <div class="masjid-thumbnail">🕌</div>
+              <div>
+                <h3 class="masjid-card-name">Masjid Istiqlal Baru</h3>
+                <span class="masjid-card-loc">📍 Jl. Pandan No. 18, Balikpapan</span>
+              </div>
+            </div>
+            <div class="masjid-info-rows">
+              <div class="masjid-info-row">
+                <span class="row-label">📅 Jadwal</span>
+                <span class="row-value">9 – 29 Ramadan</span>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">📦 Jenis Zakat</span>
+                <div class="zakat-tags">
+                  <span class="zakat-tag">🌾 Beras</span>
+                  <span class="zakat-tag tag-gold">💰 Uang</span>
+                </div>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">👥 Penerima</span>
+                <span class="row-value">176 mustahik</span>
+              </div>
+            </div>
+            <div class="masjid-card-footer">
+              <span class="distance-badge">📍 6.3 km dari Anda</span>
+              <button class="btn btn-secondary btn-sm" onclick="openModal('istiqlal')">Lihat Detail</button>
+            </div>
+          </div>
+        </article>
+
+      </div><!-- end .masjid-grid -->
+
+    </div><!-- end .container -->
+  </main>
+
+  <!-- ===== MODAL DETAIL ===== -->
+  <div class="modal-overlay" id="modalOverlay" onclick="overlayClose(event)">
+    <div class="modal-box">
+
+      <div class="modal-head">
+        <div class="modal-head-left">
+          <span class="modal-head-icon">🕌</span>
+          <div class="modal-head-name" id="mName">–</div>
+          <span class="modal-head-addr" id="mAddr">–</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- Info Umum -->
+        <div>
+          <div class="modal-section-title">📋 Informasi Umum</div>
+          <div class="modal-info-grid">
+            <div class="modal-info-item">
+              <span class="modal-info-item-icon">👥</span>
+              <div class="modal-info-item-label">Penerima (Mustahik)</div>
+              <div class="modal-info-item-value" id="mMustahik">–</div>
+            </div>
+            <div class="modal-info-item">
+              <span class="modal-info-item-icon">📍</span>
+              <div class="modal-info-item-label">Jarak dari Anda</div>
+              <div class="modal-info-item-value" id="mJarak">–</div>
+            </div>
+            <div class="modal-info-item">
+              <span class="modal-info-item-icon">🎯</span>
+              <div class="modal-info-item-label">Status</div>
+              <div class="modal-info-item-value" id="mStatus">–</div>
+            </div>
+            <div class="modal-info-item">
+              <span class="modal-info-item-icon">📦</span>
+              <div class="modal-info-item-label">Jenis Zakat</div>
+              <div class="modal-info-item-value" id="mJenis">–</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Jadwal -->
+        <div>
+          <div class="modal-section-title">📅 Jadwal Penerimaan</div>
+          <div class="modal-schedule">
+            <div class="modal-schedule-row">
+              <span class="sch-icon">📆</span>
+              <span>Tanggal: <strong id="sDate">–</strong></span>
+            </div>
+            <div class="modal-schedule-row">
+              <span class="sch-icon">🕐</span>
+              <span>Jam: <strong id="sTime">–</strong></span>
+            </div>
+            <div class="modal-schedule-row">
+              <span class="sch-icon">📅</span>
+              <span>Hari: <strong id="sDays">–</strong></span>
+            </div>
+            <div class="modal-schedule-row">
+              <span class="sch-icon">⭐</span>
+              <span>Puncak: <strong id="sPeak">–</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Besaran Zakat -->
+        <div>
+          <div class="modal-section-title">⚖️ Besaran Zakat Fitrah</div>
+          <div class="modal-nishab">
+            <div class="modal-nishab-row">
+              <span class="modal-nishab-label">🌾 Beras / Makanan Pokok</span>
+              <span class="modal-nishab-value" id="nBeras">–</span>
+            </div>
+            <div class="modal-nishab-row">
+              <span class="modal-nishab-label">💰 Setara Uang (estimasi)</span>
+              <span class="modal-nishab-value" id="nUang">–</span>
+            </div>
+            <div class="modal-nishab-row">
+              <span class="modal-nishab-label">📏 Standar Sha'</span>
+              <span class="modal-nishab-value">3,5 liter / jiwa</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metode Pembayaran -->
+        <div>
+          <div class="modal-section-title">💳 Metode Pembayaran</div>
+          <div class="modal-payments" id="mPayments"></div>
+        </div>
+
+        <!-- Kontak -->
+        <div>
+          <div class="modal-section-title">📞 Kontak &amp; Lokasi</div>
+          <div class="modal-contacts">
+            <a class="modal-contact-btn" id="cWa" href="#" target="_blank">
+              <span class="modal-contact-btn-icon">💬</span>
+              <span class="modal-contact-btn-label">WhatsApp</span>
+            </a>
+            <a class="modal-contact-btn" id="cTel" href="#">
+              <span class="modal-contact-btn-icon">📞</span>
+              <span class="modal-contact-btn-label">Telepon</span>
+            </a>
+            <a class="modal-contact-btn" id="cMaps" href="#" target="_blank">
+              <span class="modal-contact-btn-icon">🗺️</span>
+              <span class="modal-contact-btn-label">Google Maps</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-foot">
+        <button class="btn btn-secondary btn-sm" onclick="closeModal()">Tutup</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="asset/js/hamburger.js"></script>
+  <script src="asset/js/masjid.js"></script>
+  <script src="asset/js/nav.js"></script>
+
+  <script>
+    const MASJID_DATA = {
+      alfalah: {
+        name: 'Masjid Al-Falah',
+        addr: 'Jl. Merdeka No. 10, Balikpapan',
+        mustahik: '148 orang',
+        jarak: '1.2 km dari Anda',
+        status: '✅ Aktif Menerima',
+        jenis: '🌾 Beras & 💰 Uang',
+        jadwal: { date: '10 – 28 Ramadan 1446 H', time: '08.00 – 17.00 WITA', days: 'Senin – Sabtu', peak: '27 Ramadan (hari penyaluran)' },
+        nishab: { beras: '2,5 kg / jiwa', uang: 'Rp 35.000 / jiwa' },
+        payments: [
+          { icon: '🌾', cls: 'pi-rice', name: 'Beras / Makanan Pokok', desc: '2,5 kg per jiwa, beras kualitas sedang' },
+          { icon: '💵', cls: 'pi-cash', name: 'Uang Tunai', desc: 'Langsung ke panitia zakat masjid' },
+          { icon: '📲', cls: 'pi-qris', name: 'QRIS', desc: 'GoPay, OVO, DANA, m-banking semua bank' },
+          { icon: '🏦', cls: 'pi-bank', name: 'Transfer Bank', desc: 'BSI 7100 2234 567 a/n Masjid Al-Falah' },
+        ],
+        kontak: { wa: 'https://wa.me/628115001234', tel: 'tel:05424567890', maps: 'https://maps.google.com/?q=Masjid+Al+Falah+Balikpapan' },
+      },
+      attaqwa: {
+        name: 'Masjid At-Taqwa',
+        addr: 'Jl. Pendidikan No. 5, Balikpapan',
+        mustahik: '92 orang',
+        jarak: '3.7 km dari Anda',
+        status: '✅ Aktif Menerima',
+        jenis: '💰 Uang',
+        jadwal: { date: '12 – 29 Ramadan 1446 H', time: '08.00 – 16.00 WITA', days: 'Senin – Minggu', peak: '28 Ramadan (hari penyaluran)' },
+        nishab: { beras: '2,5 kg / jiwa', uang: 'Rp 35.000 / jiwa' },
+        payments: [
+          { icon: '💵', cls: 'pi-cash', name: 'Uang Tunai', desc: 'Langsung ke panitia zakat masjid' },
+          { icon: '📲', cls: 'pi-qris', name: 'QRIS', desc: 'GoPay, OVO, DANA, m-banking semua bank' },
+        ],
+        kontak: { wa: 'https://wa.me/628115005678', tel: 'tel:05424500678', maps: 'https://maps.google.com/?q=Masjid+At+Taqwa+Balikpapan' },
+      },
+      nuruliman: {
+        name: 'Masjid Nurul Iman',
+        addr: 'Jl. Harmoni No. 3, Balikpapan',
+        mustahik: '67 orang',
+        jarak: '5.1 km dari Anda',
+        status: '✅ Aktif Menerima',
+        jenis: '🌾 Beras',
+        jadwal: { date: '15 – 28 Ramadan 1446 H', time: '09.00 – 15.00 WITA', days: 'Senin – Jumat', peak: '26 Ramadan (hari penyaluran)' },
+        nishab: { beras: '2,5 kg / jiwa', uang: 'Rp 33.000 / jiwa' },
+        payments: [
+          { icon: '🌾', cls: 'pi-rice', name: 'Beras / Makanan Pokok', desc: '2,5 kg per jiwa, beras kualitas sedang' },
+        ],
+        kontak: { wa: 'https://wa.me/628115009012', tel: 'tel:05424501234', maps: 'https://maps.google.com/?q=Masjid+Nurul+Iman+Balikpapan' },
+      },
+      baitulhaq: {
+        name: 'Masjid Baitul Haq',
+        addr: 'Jl. Sudirman No. 22, Balikpapan',
+        mustahik: '201 orang',
+        jarak: '2.4 km dari Anda',
+        status: '✅ Aktif Menerima',
+        jenis: '🌾 Beras & 💰 Uang',
+        jadwal: { date: '8 – 30 Ramadan 1446 H', time: '07.00 – 18.00 WITA', days: 'Senin – Minggu', peak: '29 Ramadan (hari penyaluran)' },
+        nishab: { beras: '2,5 kg / jiwa', uang: 'Rp 35.000 / jiwa' },
+        payments: [
+          { icon: '🌾', cls: 'pi-rice', name: 'Beras / Makanan Pokok', desc: '2,5 kg per jiwa, beras kualitas sedang' },
+          { icon: '💵', cls: 'pi-cash', name: 'Uang Tunai', desc: 'Langsung ke panitia zakat masjid' },
+          { icon: '📲', cls: 'pi-qris', name: 'QRIS', desc: 'GoPay, OVO, DANA, m-banking semua bank' },
+          { icon: '🏦', cls: 'pi-bank', name: 'Transfer Bank', desc: 'BRI 0029 0100 5567 509 a/n Masjid Baitul Haq' },
+        ],
+        kontak: { wa: 'https://wa.me/628115003456', tel: 'tel:05424512345', maps: 'https://maps.google.com/?q=Masjid+Baitul+Haq+Balikpapan' },
+      },
+      arrahman: {
+        name: 'Masjid Ar-Rahman',
+        addr: 'Jl. Ahmad Yani No. 7, Balikpapan',
+        mustahik: '55 orang',
+        jarak: '4.8 km dari Anda',
+        status: '✅ Aktif Menerima',
+        jenis: '💰 Uang',
+        jadwal: { date: '11 – 27 Ramadan 1446 H', time: '08.00 – 16.00 WITA', days: 'Selasa – Sabtu', peak: '26 Ramadan (hari penyaluran)' },
+        nishab: { beras: '2,5 kg / jiwa', uang: 'Rp 33.000 / jiwa' },
+        payments: [
+          { icon: '💵', cls: 'pi-cash', name: 'Uang Tunai', desc: 'Langsung ke panitia zakat masjid' },
+          { icon: '🏦', cls: 'pi-bank', name: 'Transfer Bank', desc: 'Mandiri 140 000 7654 321 a/n Masjid Ar-Rahman' },
+        ],
+        kontak: { wa: 'https://wa.me/628115007890', tel: 'tel:05424567123', maps: 'https://maps.google.com/?q=Masjid+Ar+Rahman+Balikpapan' },
+      },
+      istiqlal: {
+        name: 'Masjid Istiqlal Baru',
+        addr: 'Jl. Pandan No. 18, Balikpapan',
+        mustahik: '176 orang',
+        jarak: '6.3 km dari Anda',
+        status: '✅ Aktif Menerima',
+        jenis: '🌾 Beras & 💰 Uang',
+        jadwal: { date: '9 – 29 Ramadan 1446 H', time: '08.00 – 17.00 WITA', days: 'Senin – Minggu', peak: '28 Ramadan (hari penyaluran)' },
+        nishab: { beras: '2,5 kg / jiwa', uang: 'Rp 35.000 / jiwa' },
+        payments: [
+          { icon: '🌾', cls: 'pi-rice', name: 'Beras / Makanan Pokok', desc: '2,5 kg per jiwa, beras kualitas sedang' },
+          { icon: '💵', cls: 'pi-cash', name: 'Uang Tunai', desc: 'Langsung ke panitia zakat masjid' },
+          { icon: '📲', cls: 'pi-qris', name: 'QRIS', desc: 'GoPay, OVO, DANA, m-banking semua bank' },
+        ],
+        kontak: { wa: 'https://wa.me/628115002468', tel: 'tel:05424509876', maps: 'https://maps.google.com/?q=Masjid+Istiqlal+Baru+Balikpapan' },
+      },
+    };
+
+    function openModal(id) {
+      const m = MASJID_DATA[id];
+      if (!m) return;
+      document.getElementById('mName').textContent     = m.name;
+      document.getElementById('mAddr').textContent     = '📍 ' + m.addr;
+      document.getElementById('mMustahik').textContent = m.mustahik;
+      document.getElementById('mJarak').textContent    = m.jarak;
+      document.getElementById('mStatus').textContent   = m.status;
+      document.getElementById('mJenis').textContent    = m.jenis;
+      document.getElementById('sDate').textContent     = m.jadwal.date;
+      document.getElementById('sTime').textContent     = m.jadwal.time;
+      document.getElementById('sDays').textContent     = m.jadwal.days;
+      document.getElementById('sPeak').textContent     = m.jadwal.peak;
+      document.getElementById('nBeras').textContent    = m.nishab.beras;
+      document.getElementById('nUang').textContent     = m.nishab.uang;
+      document.getElementById('mPayments').innerHTML   = m.payments.map(p => `
+        <div class="modal-payment-item">
+          <div class="modal-payment-icon ${p.cls}">${p.icon}</div>
+          <div class="modal-payment-info">
+            <div class="modal-payment-name">${p.name}</div>
+            <div class="modal-payment-desc">${p.desc}</div>
+          </div>
+        </div>`).join('');
+      document.getElementById('cWa').href   = m.kontak.wa;
+      document.getElementById('cTel').href  = m.kontak.tel;
+      document.getElementById('cMaps').href = m.kontak.maps;
+      const overlay = document.getElementById('modalOverlay');
+      const box = overlay.querySelector('.modal-box');
+      overlay.classList.add('open');
+      overlay.scrollTop = 0;
+      box.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function overlayClose(e) {
+      if (e.target === document.getElementById('modalOverlay')) closeModal();
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  </script>
+
+</body>
+</html>

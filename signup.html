@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar - Aplikasi Zakat Fitrah</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ===========================
+           DESIGN TOKENS
+           =========================== */
+        :root {
+            --primary-green: #5a7553;
+            --primary-green-dark: #3d5a40;
+            --primary-green-light: #7d9b76;
+            
+            --secondary-gold: #b8935e;
+            
+            --neutral-50: #fafaf9;
+            --neutral-100: #f5f5f4;
+            --neutral-200: #e7e5e4;
+            --neutral-500: #78716c;
+            --neutral-600: #57534e;
+            --neutral-700: #44403c;
+            
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            
+            --space-xs: 0.5rem;
+            --space-sm: 0.75rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+            
+            --font-sans: 'Inter', -apple-system, sans-serif;
+            --font-display: 'Plus Jakarta Sans', var(--font-sans);
+            
+            --text-xs: 0.75rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-xl: 1.25rem;
+            --text-2xl: 1.5rem;
+            --text-3xl: 1.875rem;
+            
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-full: 9999px;
+            
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            
+            --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: linear-gradient(135deg, var(--primary-green-dark) 0%, var(--primary-green) 50%, var(--primary-green-light) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: var(--space-xl) var(--space-xl) var(--space-2xl);
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveBackground 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes moveBackground {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .container {
+            background: white;
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            max-width: 500px;
+            width: 100%;
+            margin: 0 auto;
+            animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light));
+            color: white;
+            padding: var(--space-2xl) var(--space-xl);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 2px, transparent 2px);
+            background-size: 30px 30px;
+            animation: rotatePattern 30s linear infinite;
+        }
+
+        @keyframes rotatePattern {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .header-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-md);
+            font-size: 2rem;
+            backdrop-filter: blur(10px);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            animation: pulse 2s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .header h1 {
+            font-family: var(--font-display);
+            font-size: var(--text-2xl);
+            font-weight: 800;
+            margin-bottom: var(--space-xs);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: var(--text-sm);
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-container {
+            padding: var(--space-xl);
+        }
+
+        .success-message {
+            background: var(--success-light);
+            color: var(--success);
+            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-lg);
+            text-align: center;
+            display: none;
+            border-left: 4px solid var(--success);
+            font-size: var(--text-sm);
+            font-weight: 500;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: var(--space-lg);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--space-sm);
+            color: var(--neutral-700);
+            font-weight: 600;
+            font-size: var(--text-sm);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: var(--space-md) var(--space-lg);
+            border: 2px solid var(--neutral-200);
+            border-radius: var(--radius-lg);
+            font-size: var(--text-base);
+            font-family: var(--font-sans);
+            transition: all var(--transition-base);
+            background: var(--neutral-50);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 4px rgba(90, 117, 83, 0.1);
+            background: white;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-container input {
+            padding-right: 3rem;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: var(--space-lg);
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--neutral-500);
+            font-size: var(--text-xl);
+            padding: var(--space-xs);
+            transition: all var(--transition-base);
+            border-radius: var(--radius-md);
+        }
+
+        .toggle-password:hover {
+            color: var(--primary-green);
+            background: rgba(90, 117, 83, 0.1);
+        }
+
+        .password-strength {
+            margin-top: var(--space-sm);
+            font-size: var(--text-xs);
+        }
+
+        .strength-bar {
+            height: 4px;
+            background: var(--neutral-200);
+            border-radius: var(--radius-md);
+            margin-top: var(--space-xs);
+            overflow: hidden;
+        }
+
+        .strength-bar-fill {
+            height: 100%;
+            width: 0%;
+            transition: all var(--transition-base);
+            border-radius: var(--radius-md);
+        }
+
+        .strength-weak {
+            background: var(--error);
+            width: 33%;
+        }
+
+        .strength-medium {
+            background: var(--warning);
+            width: 66%;
+        }
+
+        .strength-strong {
+            background: var(--success);
+            width: 100%;
+        }
+
+        .password-requirements {
+            margin-top: var(--space-sm);
+            font-size: var(--text-xs);
+            color: var(--neutral-600);
+        }
+
+        .password-requirements ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .password-requirements li {
+            padding: 0.25rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .password-requirements li:before {
+            content: "✗";
+            position: absolute;
+            left: 0;
+            color: var(--error);
+        }
+
+        .password-requirements li.valid:before {
+            content: "✓";
+            color: var(--success);
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: var(--text-xs);
+            margin-top: var(--space-xs);
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .btn {
+            width: 100%;
+            padding: var(--space-md) var(--space-lg);
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light));
+            color: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: var(--text-base);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: 0 4px 16px rgba(90, 117, 83, 0.4);
+            font-family: var(--font-sans);
+            position: relative;
+            overflow: hidden;
+            margin-top: var(--space-md);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(90, 117, 83, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            background: var(--neutral-200);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: var(--space-lg);
+            padding: var(--space-lg);
+            background: var(--neutral-50);
+            border-radius: var(--radius-lg);
+            color: var(--neutral-600);
+            font-size: var(--text-sm);
+        }
+
+        .login-link a {
+            color: var(--primary-green);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all var(--transition-base);
+        }
+
+        .login-link a:hover {
+            color: var(--primary-green-dark);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: var(--space-md) var(--space-md) var(--space-xl);
+            }
+
+            .header {
+                padding: var(--space-xl) var(--space-lg);
+            }
+
+            .header h1 {
+                font-size: var(--text-xl);
+            }
+
+            .header-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.75rem;
+            }
+
+            .form-container {
+                padding: var(--space-lg);
+            }
+
+            .form-group {
+                margin-bottom: var(--space-md);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-icon">🌙</div>
+            <h1>Daftar Akun</h1>
+            <p>Aplikasi Zakat Fitrah</p>
+        </div>
+
+        <div class="form-container">
+            <div class="success-message" id="successMessage">
+                Pendaftaran berhasil! Mengalihkan ke halaman login...
+            </div>
+
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                    <div class="error-message" id="usernameError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fullname">Nama Lengkap</label>
+                    <input type="text" id="fullname" name="fullname" required>
+                    <div class="error-message" id="fullnameError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="contoh@gmail.com" required>
+                    <div class="error-message" id="emailError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('password', 'toggleIcon1')" id="toggleIcon1">👁️</button>
+                    </div>
+                    <div class="password-strength">
+                        <span id="strengthText">Kekuatan Password</span>
+                        <div class="strength-bar">
+                            <div class="strength-bar-fill" id="strengthBar"></div>
+                        </div>
+                    </div>
+                    <div class="password-requirements">
+                        <ul>
+                            <li id="req-length">Minimal 8 karakter</li>
+                            <li id="req-uppercase">Minimal 1 huruf besar</li>
+                            <li id="req-lowercase">Minimal 1 huruf kecil</li>
+                            <li id="req-number">Minimal 1 angka</li>
+                            <li id="req-special">Minimal 1 karakter khusus (!@#$%^&*)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Konfirmasi Password</label>
+                    <div class="password-container">
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword', 'toggleIcon2')" id="toggleIcon2">👁️</button>
+                    </div>
+                    <div class="error-message" id="confirmPasswordError"></div>
+                </div>
+
+                <button type="submit" class="btn" id="submitBtn">Daftar</button>
+            </form>
+
+            <div class="login-link">
+                Sudah punya akun? <a href="login.html">Login di sini</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const strengthBar = document.getElementById('strengthBar');
+        const strengthText = document.getElementById('strengthText');
+        const form = document.getElementById('signupForm');
+
+        // Toggle password visibility
+        function togglePassword(fieldId, iconId) {
+            const field = document.getElementById(fieldId);
+            const icon = document.getElementById(iconId);
+            
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.textContent = '🔒';
+            } else {
+                field.type = 'password';
+                icon.textContent = '👁️';
+            }
+        }
+
+        // Check password strength
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            let strength = 0;
+            
+            // Check requirements
+            const hasLength = password.length >= 8;
+            const hasUppercase = /[A-Z]/.test(password);
+            const hasLowercase = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+
+            // Update requirement indicators
+            document.getElementById('req-length').classList.toggle('valid', hasLength);
+            document.getElementById('req-uppercase').classList.toggle('valid', hasUppercase);
+            document.getElementById('req-lowercase').classList.toggle('valid', hasLowercase);
+            document.getElementById('req-number').classList.toggle('valid', hasNumber);
+            document.getElementById('req-special').classList.toggle('valid', hasSpecial);
+
+            // Calculate strength
+            if (hasLength) strength++;
+            if (hasUppercase) strength++;
+            if (hasLowercase) strength++;
+            if (hasNumber) strength++;
+            if (hasSpecial) strength++;
+
+            // Update strength bar
+            strengthBar.className = 'strength-bar-fill';
+            
+            if (strength <= 2) {
+                strengthBar.classList.add('strength-weak');
+                strengthText.textContent = 'Password Lemah';
+            } else if (strength <= 4) {
+                strengthBar.classList.add('strength-medium');
+                strengthText.textContent = 'Password Sedang';
+            } else {
+                strengthBar.classList.add('strength-strong');
+                strengthText.textContent = 'Password Kuat';
+            }
+        });
+
+        // Validate password requirements
+        function validatePassword(password) {
+            const hasLength = password.length >= 8;
+            const hasUppercase = /[A-Z]/.test(password);
+            const hasLowercase = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+
+            return hasLength && hasUppercase && hasLowercase && hasNumber && hasSpecial;
+        }
+
+        // Form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Clear previous errors
+            document.querySelectorAll('.error-message').forEach(el => el.classList.remove('show'));
+            
+            let isValid = true;
+            
+            // Get form values
+            const username = document.getElementById('username').value.trim();
+            const fullname = document.getElementById('fullname').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            
+            // Validate username
+            if (username.length < 3) {
+                document.getElementById('usernameError').textContent = 'Username minimal 3 karakter';
+                document.getElementById('usernameError').classList.add('show');
+                isValid = false;
+            }
+            
+            // Validate fullname
+            if (fullname.length < 3) {
+                document.getElementById('fullnameError').textContent = 'Nama lengkap minimal 3 karakter';
+                document.getElementById('fullnameError').classList.add('show');
+                isValid = false;
+            }
+            
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('emailError').textContent = 'Email tidak valid';
+                document.getElementById('emailError').classList.add('show');
+                isValid = false;
+            } else if (!email.toLowerCase().endsWith('@gmail.com')) {
+                document.getElementById('emailError').textContent = 'Email harus menggunakan @gmail.com';
+                document.getElementById('emailError').classList.add('show');
+                isValid = false;
+            }
+            
+            // Validate password strength
+            if (!validatePassword(password)) {
+                alert('Password harus memenuhi semua persyaratan yang ditentukan');
+                isValid = false;
+            }
+            
+            // Validate password confirmation
+            if (password !== confirmPassword) {
+                document.getElementById('confirmPasswordError').textContent = 'Password tidak cocok';
+                document.getElementById('confirmPasswordError').classList.add('show');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // Check if user already exists
+                const users = JSON.parse(localStorage.getItem('zakatUsers') || '[]');
+                const userExists = users.some(u => u.username === username || u.email === email);
+                
+                if (userExists) {
+                    alert('Username atau email sudah terdaftar!');
+                    return;
+                }
+                
+                // Save user data
+                const newUser = {
+                    username: username,
+                    fullname: fullname,
+                    email: email,
+                    password: password,
+                    hasLoggedIn: false,
+                    registeredAt: new Date().toISOString()
+                };
+                
+                users.push(newUser);
+                localStorage.setItem('zakatUsers', JSON.stringify(users));
+                
+                // Show success message
+                document.getElementById('successMessage').classList.add('show');
+                form.reset();
+                strengthBar.className = 'strength-bar-fill';
+                strengthText.textContent = 'Kekuatan Password';
+                document.querySelectorAll('.password-requirements li').forEach(li => li.classList.remove('valid'));
+                
+                // Redirect to login page after 2 seconds
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>

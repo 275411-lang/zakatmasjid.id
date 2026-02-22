@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masjid Penerima Zakat</title>
+
+  <!-- Global design system -->
+  <link rel="stylesheet" href="asset/css/style.css">
+  <!-- Page-specific styles -->
+  <link rel="stylesheet" href="asset/css/masjid.css">
+</head>
+<body>
+
+  <!-- ========================= HEADER ========================= -->
+  <header class="main-header">
+    <div class="container">
+      <div class="header-content">
+
+        <a href="index.html" class="logo">
+          <span class="logo-icon">🕌</span>
+          <h1>Zakat Masjid</h1>
+        </a>
+
+        <nav class="main-nav"> 
+          <a href="Index.html" class="nav-link">Dashboard</a>
+          <a href="Kalkulator" class="nav-link">Hitung Zakat</a>
+          <a href="Masjid" class="nav-link active">Masjid</a>
+          <a href="Edukasi.html" class="nav-link">Panduan</a>
+        </nav>
+
+        <button class="btn-profile" aria-label="Profil">
+          <span class="avatar-small">AM</span>
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================= MAIN ========================= -->
+  <main class="dashboard-main">
+    <div class="container">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Masjid Penerima Zakat</h1>
+          <p class="page-subtitle">Temukan masjid terdekat &amp; selesaikan pembayaran zakat Anda</p>
+        </div>
+        <button class="btn btn-primary">
+          <span class="btn-icon">📍</span> Cari Terdekat
+        </button>
+      </div>
+
+      <!-- Summary Bar -->
+      <div class="masjid-summary-bar">
+
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-green">🕌</div>
+          <div class="stat-content">
+            <span class="stat-value">12</span>
+            <span class="stat-label">Total Masjid</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-blue">✅</div>
+          <div class="stat-content">
+            <span class="stat-value">9</span>
+            <span class="stat-label">Masjid Aktif</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-gold">📦</div>
+          <div class="stat-content">
+            <span class="stat-value">3</span>
+            <span class="stat-label">Terima Beras</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Toolbar : Search + Filter Pills -->
+      <div class="masjid-toolbar">
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="search-input" placeholder="Cari masjid atau alamat…">
+        </div>
+
+        <div class="filter-pills">
+          <button class="pill active">Semua</button>
+          <button class="pill">Beras</button>
+          <button class="pill">Uang</button>
+          <button class="pill">Terdekat</button>
+        </div>
+      </div>
+
+      <!-- ─── Masjid Grid ─── -->
+      <div class="masjid-grid">
+
+        <!-- Card 1 – Al-Falah -->
+        <article class="card masjid-card">
+          <div class="card-body">
+            <div class="masjid-card-header">
+              <div class="masjid-thumbnail">🕌</div>
+              <div>
+                <h3 class="masjid-card-name">Masjid Al-Falah</h3>
+                <span class="masjid-card-loc">📍 Jl. Merdeka No. 10, Balikpapan</span>
+              </div>
+            </div>
+
+            <div class="masjid-info-rows">
+              <div class="masjid-info-row">
+                <span class="row-label">📅 Jadwal</span>
+                <span class="row-value">10 – 28 Ramadan</span>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">📦 Jenis Zakat</span>
+                <div class="zakat-tags">
+                  <span class="zakat-tag">🌾 Beras</span>
+                  <span class="zakat-tag tag-gold">💰 Uang</span>
+                </div>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">👥 Penerima</span>
+                <span class="row-value">148 mustahik</span>
+              </div>
+            </div>
+
+            <div class="masjid-card-footer">
+              <span class="distance-badge">📍 1.2 km dari Anda</span>
+              <a href="masjid-detail.html" class="btn btn-secondary btn-sm">Lihat Detail</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2 – At-Taqwa -->
+        <article class="card masjid-card">
+          <div class="card-body">
+            <div class="masjid-card-header">
+              <div class="masjid-thumbnail">🕌</div>
+              <div>
+                <h3 class="masjid-card-name">Masjid At-Taqwa</h3>
+                <span class="masjid-card-loc">📍 Jl. Pendidikan No. 5, Balikpapan</span>
+              </div>
+            </div>
+
+            <div class="masjid-info-rows">
+              <div class="masjid-info-row">
+                <span class="row-label">📅 Jadwal</span>
+                <span class="row-value">12 – 29 Ramadan</span>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">📦 Jenis Zakat</span>
+                <div class="zakat-tags">
+                  <span class="zakat-tag tag-gold">💰 Uang</span>
+                </div>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">👥 Penerima</span>
+                <span class="row-value">92 mustahik</span>
+              </div>
+            </div>
+
+            <div class="masjid-card-footer">
+              <span class="distance-badge">📍 3.7 km dari Anda</span>
+              <a href="masjid-detail.html" class="btn btn-secondary btn-sm">Lihat Detail</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3 – Nurul Iman -->
+        <article class="card masjid-card">
+          <div class="card-body">
+            <div class="masjid-card-header">
+              <div class="masjid-thumbnail">🕌</div>
+              <div>
+                <h3 class="masjid-card-name">Masjid Nurul Iman</h3>
+                <span class="masjid-card-loc">📍 Jl. Harmoni No. 3, Balikpapan</span>
+              </div>
+            </div>
+
+            <div class="masjid-info-rows">
+              <div class="masjid-info-row">
+                <span class="row-label">📅 Jadwal</span>
+                <span class="row-value">15 – 28 Ramadan</span>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">📦 Jenis Zakat</span>
+                <div class="zakat-tags">
+                  <span class="zakat-tag">🌾 Beras</span>
+                </div>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">👥 Penerima</span>
+                <span class="row-value">67 mustahik</span>
+              </div>
+            </div>
+
+            <div class="masjid-card-footer">
+              <span class="distance-badge">📍 5.1 km dari Anda</span>
+              <a href="masjid-detail.html" class="btn btn-secondary btn-sm">Lihat Detail</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 4 – Baitul Haq -->
+        <article class="card masjid-card">
+          <div class="card-body">
+            <div class="masjid-card-header">
+              <div class="masjid-thumbnail">🕌</div>
+              <div>
+                <h3 class="masjid-card-name">Masjid Baitul Haq</h3>
+                <span class="masjid-card-loc">📍 Jl. Sudirman No. 22, Balikpapan</span>
+              </div>
+            </div>
+
+            <div class="masjid-info-rows">
+              <div class="masjid-info-row">
+                <span class="row-label">📅 Jadwal</span>
+                <span class="row-value">8 – 30 Ramadan</span>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">📦 Jenis Zakat</span>
+                <div class="zakat-tags">
+                  <span class="zakat-tag">🌾 Beras</span>
+                  <span class="zakat-tag tag-gold">💰 Uang</span>
+                </div>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">👥 Penerima</span>
+                <span class="row-value">201 mustahik</span>
+              </div>
+            </div>
+
+            <div class="masjid-card-footer">
+              <span class="distance-badge">📍 2.4 km dari Anda</span>
+              <a href="masjid-detail.html" class="btn btn-secondary btn-sm">Lihat Detail</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 5 – Ar-Rahman -->
+        <article class="card masjid-card">
+          <div class="card-body">
+            <div class="masjid-card-header">
+              <div class="masjid-thumbnail">🕌</div>
+              <div>
+                <h3 class="masjid-card-name">Masjid Ar-Rahman</h3>
+                <span class="masjid-card-loc">📍 Jl. Ahmad Yani No. 7, Balikpapan</span>
+              </div>
+            </div>
+
+            <div class="masjid-info-rows">
+              <div class="masjid-info-row">
+                <span class="row-label">📅 Jadwal</span>
+                <span class="row-value">11 – 27 Ramadan</span>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">📦 Jenis Zakat</span>
+                <div class="zakat-tags">
+                  <span class="zakat-tag tag-gold">💰 Uang</span>
+                </div>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">👥 Penerima</span>
+                <span class="row-value">55 mustahik</span>
+              </div>
+            </div>
+
+            <div class="masjid-card-footer">
+              <span class="distance-badge">📍 4.8 km dari Anda</span>
+              <a href="masjid-detail.html" class="btn btn-secondary btn-sm">Lihat Detail</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 6 – Istiqlal Baru -->
+        <article class="card masjid-card">
+          <div class="card-body">
+            <div class="masjid-card-header">
+              <div class="masjid-thumbnail">🕌</div>
+              <div>
+                <h3 class="masjid-card-name">Masjid Istiqlal Baru</h3>
+                <span class="masjid-card-loc">📍 Jl. Pandan No. 18, Balikpapan</span>
+              </div>
+            </div>
+
+            <div class="masjid-info-rows">
+              <div class="masjid-info-row">
+                <span class="row-label">📅 Jadwal</span>
+                <span class="row-value">9 – 29 Ramadan</span>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">📦 Jenis Zakat</span>
+                <div class="zakat-tags">
+                  <span class="zakat-tag">🌾 Beras</span>
+                  <span class="zakat-tag tag-gold">💰 Uang</span>
+                </div>
+              </div>
+              <div class="masjid-info-row">
+                <span class="row-label">👥 Penerima</span>
+                <span class="row-value">176 mustahik</span>
+              </div>
+            </div>
+
+            <div class="masjid-card-footer">
+              <span class="distance-badge">📍 6.3 km dari Anda</span>
+              <a href="masjid-detail.html" class="btn btn-secondary btn-sm">Lihat Detail</a>
+            </div>
+          </div>
+        </article>
+
+      </div><!-- end .masjid-grid -->
+
+    </div><!-- end .container -->
+  </main>
+
+  <!-- ========================= FOOTER ========================= -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="footer-content">
+
+        <div>
+          <div class="footer-logo">
+            <span style="font-size:1.5rem;">🕌</span>
+            <h3>Zakat Masjid</h3>
+          </div>
+          <p class="footer-desc">
+            Platform digital untuk memudahkan umat dalam menunaikan
+            zakat fitrah kepada masjid-masjid terdekat di wilayah Anda.
+          </p>
+        </div>
+
+        <div class="footer-section">
+          <h4>Navigasi</h4>
+          <ul>
+            <li><a href="index.html">Dashboard</a></li>
+            <li><a href="Kalkulator.html">Hitung Zakat</a></li>
+            <li><a href="Masjid.html">Masjid</a></li>
+            <li><a href="Beranda.html">Beranda</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Bantuan</h4>
+          <ul>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Panduan Pembayaran</a></li>
+            <li><a href="#">Hubungi Kami</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Lainnya</h4>
+          <ul>
+            <li><a href="#">Kebijakan Privasi</a></li>
+            <li><a href="#">Syarat &amp; Ketentuan</a></li>
+            <li><a href="#">Tentang Kami</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Zakat Masjid. Semua hak dilindungi undang-undang.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS page-specific, di-load di bawah body -->
+  <script src="asset/js/masjid.js"></script>
+  <script src="asset/js/nav.js"></script>
+
+</body>
+</html>

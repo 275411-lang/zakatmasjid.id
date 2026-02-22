@@ -1,0 +1,410 @@
+/* ===========================
+   beranda.css
+   Styles tambahan khusus halaman Beranda.
+   style.css (global) tetap di-load terpisah.
+   =========================== */
+
+/* ───────────────────────────
+   HERO SECTION
+   ─────────────────────────── */
+.hero {
+  position: relative;
+  margin-bottom: var(--space-3xl);
+  padding: var(--space-3xl) var(--space-2xl);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--primary-green-dark) 0%, var(--primary-green) 50%, var(--primary-green-light) 100%);
+  background-size: 200% 200%;
+  animation: heroGradient 6s ease infinite;
+  color: white;
+}
+
+@keyframes heroGradient {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Dekorasi latar belakang */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 280px;
+  height: 280px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-full);
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -40px;
+  left: -40px;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-full);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+}
+
+.hero-icon {
+  font-size: 3.5rem;
+  display: block;
+  margin-bottom: var(--space-lg);
+  animation: heroIconFloat 3s ease-in-out infinite;
+}
+
+@keyframes heroIconFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: var(--space-md);
+  color: white;
+}
+
+.hero-desc {
+  font-size: var(--text-lg);
+  line-height: 1.7;
+  opacity: 0.92;
+  margin-bottom: var(--space-xl);
+}
+
+.hero-actions {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+/* btn-hero : putih solid di atas hero gelap */
+.btn-hero {
+  background: white;
+  color: var(--primary-green-dark);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+}
+
+.btn-hero:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+}
+
+/* btn-hero-outline : transparan di atas hero */
+.btn-hero-outline {
+  background: transparent;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.btn-hero-outline:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: white;
+  transform: translateY(-3px);
+}
+
+/* ───────────────────────────
+   SECTION TITLE (reusable)
+   ─────────────────────────── */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--primary-green);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: var(--space-sm);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 800;
+  color: var(--primary-green-dark);
+  margin-bottom: var(--space-xs);
+}
+
+.section-subtitle {
+  font-size: var(--text-lg);
+  color: var(--neutral-500);
+  margin-bottom: var(--space-2xl);
+  max-width: 560px;
+}
+
+.section-head {
+  margin-bottom: var(--space-2xl);
+}
+
+/* ───────────────────────────
+   EDU CARDS (Apa itu Zakat…)
+   ─────────────────────────── */
+.edu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-xl);
+  margin-bottom: var(--space-3xl);
+}
+
+.edu-card {
+  /* layered on top of .card */
+  display: flex;
+  flex-direction: column;
+}
+
+.edu-card .card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.edu-number {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light));
+  color: white;
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-md);
+  flex-shrink: 0;
+}
+
+.edu-icon {
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-md);
+  display: block;
+  transition: transform var(--transition-base);
+}
+
+.edu-card:hover .edu-icon {
+  transform: scale(1.15) rotate(-5deg);
+}
+
+.edu-card-title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--primary-green-dark);
+  margin-bottom: var(--space-sm);
+}
+
+.edu-card-desc {
+  font-size: var(--text-sm);
+  color: var(--neutral-600);
+  line-height: 1.7;
+  flex: 1;
+}
+
+/* ───────────────────────────
+   FEATURE GRID (Fitur Website)
+   ─────────────────────────── */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+  margin-bottom: var(--space-3xl);
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  background: white;
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-xl);
+  transition: all var(--transition-base);
+}
+
+.feature-item:hover {
+  border-color: var(--primary-green-light);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+.feature-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-2xl);
+  flex-shrink: 0;
+  background: linear-gradient(135deg, rgba(125, 155, 118, 0.15), rgba(90, 117, 83, 0.08));
+  transition: transform var(--transition-base);
+}
+
+.feature-item:hover .feature-icon-wrap {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.feature-item-title {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--primary-green-dark);
+  margin-bottom: 0.25rem;
+}
+
+.feature-item-desc {
+  font-size: var(--text-sm);
+  color: var(--neutral-500);
+  line-height: 1.6;
+}
+
+/* ───────────────────────────
+   CTA BANNER (bawah)
+   ─────────────────────────── */
+.cta-banner {
+  position: relative;
+  padding: var(--space-3xl) var(--space-2xl);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--secondary-gold-dark), var(--secondary-gold), var(--secondary-gold-light));
+  color: white;
+  text-align: center;
+  margin-bottom: var(--space-3xl);
+}
+
+/* Dekorasi */
+.cta-banner::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  left: -50px;
+  width: 220px;
+  height: 220px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: var(--radius-full);
+}
+
+.cta-banner::after {
+  content: '';
+  position: absolute;
+  bottom: -60px;
+  right: -60px;
+  width: 260px;
+  height: 260px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-full);
+}
+
+.cta-content {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.cta-icon {
+  font-size: 2.8rem;
+  display: block;
+  margin-bottom: var(--space-md);
+}
+
+.cta-title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  margin-bottom: var(--space-sm);
+}
+
+.cta-desc {
+  font-size: var(--text-base);
+  opacity: 0.92;
+  line-height: 1.7;
+  margin-bottom: var(--space-xl);
+}
+
+.btn-cta {
+  background: white;
+  color: var(--secondary-gold-dark);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+}
+
+.btn-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.25);
+}
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+@media (max-width: 968px) {
+  .edu-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .hero-title {
+    font-size: var(--text-3xl);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: var(--space-2xl) var(--space-lg);
+  }
+
+  .hero-title {
+    font-size: var(--text-2xl);
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .edu-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-banner {
+    padding: var(--space-2xl) var(--space-lg);
+  }
+
+  .section-title {
+    font-size: var(--text-2xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .hero-icon {
+    font-size: 2.5rem;
+  }
+
+  .hero-title {
+    font-size: var(--text-xl);
+  }
+
+  .hero-desc {
+    font-size: var(--text-base);
+  }
+}

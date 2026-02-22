@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profil | Zakat Masjid</title>
+  <link rel="stylesheet" href="asset/css/style.css">
+  <style>
+    * { box-sizing: border-box; }
+    body { background: #f5f7f5; }
+
+    /* ===== HEADER ===== */
+    .main-header {
+      background: white;
+      border-bottom: 1px solid var(--neutral-200);
+      position: sticky; top: 0; z-index: 1000;
+      box-shadow: var(--shadow-sm);
+    }
+    .container { max-width: 1400px; margin: 0 auto; padding: 0 var(--space-lg); }
+    .header-content {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--space-md) 0; gap: var(--space-xl);
+    }
+    .logo { display: flex; align-items: center; gap: var(--space-sm); text-decoration: none; }
+    .logo-icon { font-size: 2rem; }
+    .logo h1 { font-family: var(--font-display); font-size: var(--text-xl); font-weight: 800; color: var(--primary-green-dark); }
+    .main-nav { display: flex; gap: var(--space-xs); }
+    .nav-link { padding: var(--space-sm) var(--space-lg); color: var(--neutral-600); text-decoration: none; font-weight: 600; border-radius: var(--radius-md); transition: all var(--transition-base); }
+    .nav-link:hover { background: rgba(125,155,118,0.1); color: var(--primary-green); }
+    .nav-link.active { background: linear-gradient(135deg, var(--primary-green-light), var(--primary-green)); color: white; }
+    .btn-profile { width: 44px; height: 44px; border: none; background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light)); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: var(--space-sm); }
+    .hamburger span { width: 25px; height: 3px; background: var(--primary-green-dark); border-radius: 3px; transition: all var(--transition-base); }
+    .nav-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
+
+    /* ===== MAIN ===== */
+    .page-main { padding: var(--space-2xl) 0 var(--space-2xl); }
+
+    /* ===== PAGE HEADER ===== */
+    .page-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: var(--space-xl);
+    }
+    .page-header-left { display: flex; align-items: center; gap: var(--space-md); }
+    .back-btn {
+      display: flex; align-items: center; gap: var(--space-xs);
+      color: var(--neutral-500); text-decoration: none;
+      font-size: var(--text-sm); font-weight: 600;
+      padding: var(--space-sm) var(--space-md);
+      background: white; border: 1px solid var(--neutral-200);
+      border-radius: var(--radius-full);
+      transition: all var(--transition-base);
+    }
+    .back-btn:hover { color: var(--primary-green); border-color: var(--primary-green); background: var(--neutral-50); }
+    .page-title { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 800; color: var(--primary-green-dark); }
+    .page-subtitle { color: var(--neutral-500); font-size: var(--text-sm); margin-top: 0.2rem; }
+
+    /* ===== LAYOUT ===== */
+    .profil-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: var(--space-xl);
+      align-items: start;
+    }
+
+    /* ===== CARD ===== */
+    .card {
+      background: white;
+      border-radius: var(--radius-2xl);
+      border: 1px solid var(--neutral-200);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .card-header {
+      padding: var(--space-lg) var(--space-xl);
+      border-bottom: 1px solid var(--neutral-100);
+      display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(to bottom, rgba(125,155,118,0.04), transparent);
+    }
+    .card-title { font-family: var(--font-display); font-size: var(--text-lg); font-weight: 700; color: var(--primary-green-dark); }
+    .card-body { padding: var(--space-xl); }
+
+    /* ===== AVATAR CARD ===== */
+    .avatar-card-header {
+      text-align: center;
+      padding: var(--space-2xl) var(--space-xl) var(--space-xl);
+      background: linear-gradient(135deg, var(--primary-green-light), var(--primary-green));
+      position: relative; overflow: hidden;
+    }
+    .avatar-card-header::before {
+      content: '';
+      position: absolute; top: -40px; right: -40px;
+      width: 130px; height: 130px;
+      background: rgba(255,255,255,0.08); border-radius: 50%;
+    }
+    .avatar-card-header::after {
+      content: '';
+      position: absolute; bottom: -40px; left: -20px;
+      width: 100px; height: 100px;
+      background: rgba(255,255,255,0.06); border-radius: 50%;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-bottom: var(--space-md);
+      z-index: 1;
+    }
+    .avatar-circle {
+      width: 90px; height: 90px;
+      background: white;
+      color: var(--primary-green);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem; font-weight: 800;
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.3);
+      margin: 0 auto;
+    }
+    .avatar-edit-btn {
+      position: absolute; bottom: 2px; right: 2px;
+      width: 28px; height: 28px;
+      background: white; border: 2px solid var(--neutral-100);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-base);
+    }
+    .avatar-edit-btn:hover { background: var(--primary-green); color: white; border-color: var(--primary-green); }
+
+    .avatar-name { font-family: var(--font-display); font-size: var(--text-xl); font-weight: 800; color: white; margin-bottom: 0.25rem; position: relative; z-index: 1; }
+    .avatar-role { font-size: var(--text-sm); color: rgba(255,255,255,0.85); position: relative; z-index: 1; }
+
+    .avatar-stats {
+      padding: var(--space-lg) var(--space-xl);
+      display: flex; flex-direction: column; gap: 0;
+    }
+    .avatar-stat-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--space-md) 0;
+      border-bottom: 1px solid var(--neutral-100);
+      font-size: var(--text-sm);
+    }
+    .avatar-stat-row:last-child { border-bottom: none; }
+    .avatar-stat-label { color: var(--neutral-500); font-weight: 500; display: flex; align-items: center; gap: var(--space-sm); }
+    .avatar-stat-value { font-weight: 700; color: var(--neutral-800); }
+    .stat-badge {
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-full);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    /* ===== FORM ===== */
+    .form-sections { display: flex; flex-direction: column; gap: var(--space-xl); }
+
+    .form-section-title {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--neutral-400);
+      margin-bottom: var(--space-lg);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid var(--neutral-100);
+    }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg); }
+    .form-grid.full { grid-template-columns: 1fr; }
+    .form-col-full { grid-column: 1 / -1; }
+
+    .form-group { display: flex; flex-direction: column; gap: var(--space-xs); }
+
+    .form-label {
+      font-size: var(--text-sm);
+      font-weight: 700;
+      color: var(--neutral-700);
+    }
+    .form-label span { color: var(--error); margin-left: 2px; }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 0.7rem var(--space-lg);
+      border: 1.5px solid var(--neutral-200);
+      border-radius: var(--radius-lg);
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      color: var(--neutral-800);
+      background: var(--neutral-50);
+      transition: all var(--transition-base);
+      outline: none;
+    }
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--primary-green);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(125,155,118,0.12);
+    }
+    .form-input::placeholder,
+    .form-textarea::placeholder { color: var(--neutral-400); }
+
+    .form-textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+    .form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem; cursor: pointer; }
+
+    .form-hint { font-size: var(--text-xs); color: var(--neutral-400); margin-top: 0.15rem; }
+
+    /* Radio Group */
+    .radio-group { display: flex; gap: var(--space-md); flex-wrap: wrap; }
+    .radio-item {
+      display: flex; align-items: center; gap: var(--space-sm);
+      padding: 0.6rem var(--space-lg);
+      border: 1.5px solid var(--neutral-200);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      background: var(--neutral-50);
+      user-select: none;
+    }
+    .radio-item:hover { border-color: var(--primary-green); background: rgba(125,155,118,0.05); }
+    .radio-item input[type="radio"] { accent-color: var(--primary-green); width: 16px; height: 16px; cursor: pointer; }
+    .radio-item.checked { border-color: var(--primary-green); background: rgba(125,155,118,0.08); }
+    .radio-label { font-size: var(--text-sm); font-weight: 600; color: var(--neutral-700); }
+
+    /* Checkbox */
+    .checkbox-group { display: flex; flex-direction: column; gap: var(--space-sm); }
+    .checkbox-item {
+      display: flex; align-items: center; gap: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
+      border: 1.5px solid var(--neutral-200);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      background: var(--neutral-50);
+    }
+    .checkbox-item:hover { border-color: var(--primary-green); background: rgba(125,155,118,0.05); }
+    .checkbox-item input[type="checkbox"] { accent-color: var(--primary-green); width: 16px; height: 16px; cursor: pointer; }
+    .checkbox-label { font-size: var(--text-sm); font-weight: 600; color: var(--neutral-700); }
+    .checkbox-desc { font-size: var(--text-xs); color: var(--neutral-400); margin-top: 0.1rem; }
+
+    /* Number input */
+    .number-input-wrapper { position: relative; display: flex; align-items: center; }
+    .number-input-wrapper .form-input { padding-right: 3rem; }
+    .number-suffix {
+      position: absolute; right: var(--space-lg);
+      font-size: var(--text-xs); color: var(--neutral-400); font-weight: 600;
+      pointer-events: none;
+    }
+
+    /* ===== FORM ACTIONS ===== */
+    .form-actions {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: var(--space-md);
+      padding: var(--space-xl);
+      border-top: 1px solid var(--neutral-100);
+      background: linear-gradient(to top, rgba(125,155,118,0.03), transparent);
+    }
+    .form-actions-right { display: flex; gap: var(--space-md); }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-flex; align-items: center; gap: var(--space-sm);
+      padding: var(--space-md) var(--space-xl);
+      border-radius: var(--radius-full);
+      font-family: var(--font-body); font-weight: 700; font-size: var(--text-sm);
+      cursor: pointer; transition: all var(--transition-base);
+      text-decoration: none; border: none;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark)); color: white; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(90,117,83,0.3); }
+    .btn-secondary { background: white; color: var(--primary-green); border: 2px solid var(--primary-green); }
+    .btn-secondary:hover { background: var(--primary-green); color: white; }
+    .btn-ghost { background: none; color: var(--neutral-500); border: 1.5px solid var(--neutral-200); }
+    .btn-ghost:hover { color: var(--error); border-color: var(--error); background: #fff5f5; }
+
+    /* ===== TOAST ===== */
+    .toast {
+      position: fixed; bottom: 2rem; right: 2rem;
+      background: var(--primary-green-dark); color: white;
+      padding: var(--space-md) var(--space-xl);
+      border-radius: var(--radius-xl);
+      font-weight: 600; font-size: var(--text-sm);
+      box-shadow: var(--shadow-lg);
+      display: flex; align-items: center; gap: var(--space-sm);
+      z-index: 9999;
+      transform: translateY(100px); opacity: 0;
+      transition: all 0.35s cubic-bezier(.34,1.56,.64,1);
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* ===== DANGER ZONE ===== */
+    .danger-zone {
+      background: #fff5f5;
+      border: 1.5px solid #fecaca;
+      border-radius: var(--radius-xl);
+      padding: var(--space-lg) var(--space-xl);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: var(--space-lg);
+      flex-wrap: wrap;
+    }
+    .danger-zone-text h4 { font-weight: 700; color: var(--error); font-size: var(--text-sm); margin-bottom: 0.2rem; }
+    .danger-zone-text p { font-size: var(--text-xs); color: var(--neutral-500); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 968px) {
+      .profil-grid { grid-template-columns: 1fr; }
+      .hamburger { display: flex; }
+      .main-nav {
+        position: fixed; top: 0; right: -100%;
+        width: 280px; height: 100vh;
+        background: white; flex-direction: column;
+        padding: 80px 20px 20px;
+        transition: right 0.3s ease; z-index: 1000;
+      }
+      .main-nav.active { right: 0; }
+      .nav-overlay.active { display: block; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .page-header { flex-direction: column; align-items: flex-start; gap: var(--space-md); }
+      .form-actions { flex-direction: column; }
+      .form-actions-right { width: 100%; flex-direction: column; }
+      .form-actions-right .btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="main-header">
+    <div class="container">
+      <div class="header-content">
+        <a href="dashboard.html" class="logo">
+          <span class="logo-icon">🕌</span>
+          <h1>Zakat Masjid</h1>
+        </a>
+
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+
+        <nav class="main-nav" id="mainNav">
+          <a href="dashboard.html" class="nav-link active">Dashboard</a>
+          <a href="Kalkulator.html" class="nav-link">Hitung Zakat</a>
+          <a href="masjid.html" class="nav-link">Masjid</a>
+          <a href="Edukasi.html" class="nav-link">Panduan</a>
+        </nav>
+
+        <button class="btn-profile" aria-label="Profil">
+          <span class="avatar-small">B</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="nav-overlay" id="navOverlay"></div>
+
+  <!-- MAIN -->
+  <main class="page-main">
+    <div class="container">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="page-header-left">
+          <a href="dashboard.html" class="back-btn">← Kembali</a>
+          <div>
+            <h1 class="page-title">Edit Profil</h1>
+            <p class="page-subtitle">Kelola informasi pribadi dan preferensi zakat Anda</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid Layout -->
+      <div class="profil-grid">
+
+        <!-- LEFT: Avatar Card -->
+        <div style="display:flex;flex-direction:column;gap:var(--space-xl);">
+
+          <div class="card">
+            <div class="avatar-card-header">
+              <div class="avatar-wrapper">
+                <div class="avatar-circle" id="avatarCircle">B</div>
+                <button class="avatar-edit-btn" title="Ganti foto">✏️</button>
+              </div>
+              <div class="avatar-name" id="previewName">Baduy</div>
+              <div class="avatar-role" id="previewRole">Kepala Keluarga</div>
+            </div>
+            <div class="avatar-stats">
+              <div class="avatar-stat-row">
+                <span class="avatar-stat-label">📊 Perhitungan</span>
+                <span class="avatar-stat-value">8 kali</span>
+              </div>
+              <div class="avatar-stat-row">
+                <span class="avatar-stat-label">✅ Zakat Terbayar</span>
+                <span class="avatar-stat-value">5 kali</span>
+              </div>
+
+              <div class="avatar-stat-row">
+                <span class="avatar-stat-label">📅 Bergabung</span>
+                <span class="avatar-stat-value">Jan 2026</span>
+              </div>
+              <div class="avatar-stat-row">
+                <span class="avatar-stat-label">🏅 Status</span>
+                <span class="stat-badge">Aktif</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Danger Zone -->
+          <div class="card">
+            <div class="card-body">
+              <div class="form-section-title">⚠️ Zona Berbahaya</div>
+              <div class="danger-zone">
+                <div class="danger-zone-text">
+                  <h4>Reset Data Profil</h4>
+                  <p>Semua data perhitungan dan riwayat akan dihapus permanen.</p>
+                </div>
+                <button class="btn btn-ghost" onclick="confirmReset()">🗑️ Reset</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Form -->
+        <div>
+          <form id="profilForm" onsubmit="simpanProfil(event)">
+            <div class="form-sections">
+
+              <!-- DATA PRIBADI -->
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">👤 Data Pribadi</h3>
+                </div>
+                <div class="card-body">
+                  <div class="form-section-title">Informasi Utama</div>
+                  <div class="form-grid">
+
+                    <div class="form-group">
+                      <label class="form-label">Nama Lengkap <span>*</span></label>
+                      <input type="text" class="form-input" id="inputNama" placeholder="Contoh: Ahmad Baduy" value="Baduy" oninput="updatePreview()" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">Status <span>*</span></label>
+                      <select class="form-select" id="inputStatus" oninput="updatePreview()">
+                        <option value="Kepala Keluarga" selected>Kepala Keluarga</option>
+                        <option value="Muzakki">Muzakki</option>
+                        <option value="Wali">Wali</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">Email <span>*</span></label>
+                      <input type="email" class="form-input" id="inputEmail" placeholder="email@contoh.com" value="baduy@email.com" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">No. Telepon</label>
+                      <input type="tel" class="form-input" id="inputTelepon" placeholder="+62 812-xxxx-xxxx" value="+62 812-3456-7890">
+                    </div>
+
+                    <div class="form-group form-col-full">
+                      <label class="form-label">Alamat</label>
+                      <textarea class="form-textarea" id="inputAlamat" placeholder="Alamat tempat tinggal...">Jl. Merdeka No. 5, Balikpapan, Kalimantan Timur</textarea>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <!-- DATA ZAKAT -->
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">🌙 Data Zakat</h3>
+                </div>
+                <div class="card-body">
+                  <div class="form-section-title">Preferensi Pembayaran</div>
+                  <div class="form-grid">
+
+                    <div class="form-group">
+                      <label class="form-label">Jumlah Anggota Keluarga <span>*</span></label>
+                      <div class="number-input-wrapper">
+                        <input type="number" class="form-input" id="inputAnggota" min="1" max="30" value="4" required>
+                        <span class="number-suffix">jiwa</span>
+                      </div>
+                      <span class="form-hint">Termasuk kepala keluarga</span>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">Jenis Zakat yang Dipilih</label>
+                      <select class="form-select" id="inputJenisZakat">
+                        <option value="beras" selected>🌾 Beras</option>
+                        <option value="uang">💰 Uang</option>
+                        <option value="keduanya">🌾💰 Keduanya</option>
+                      </select>
+                    </div>
+
+
+                  </div>
+                </div>
+              </div>
+
+              <!-- CATATAN -->
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">📝 Catatan Tambahan</h3>
+                </div>
+                <div class="card-body">
+                  <div class="form-group">
+                    <label class="form-label">Catatan (opsional)</label>
+                    <textarea class="form-textarea" id="inputCatatan" placeholder="Catatan pribadi mengenai zakat Anda..." style="min-height:120px;"></textarea>
+                    <span class="form-hint">Catatan ini hanya terlihat oleh Anda</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- FORM ACTIONS -->
+            <div class="form-actions" style="margin-top:var(--space-xl);background:white;border-radius:var(--radius-2xl);border:1px solid var(--neutral-200);box-shadow:var(--shadow-sm);">
+              <button type="button" class="btn btn-ghost" onclick="resetForm()">↩️ Batalkan</button>
+              <div class="form-actions-right">
+                <a href="dashboard.html" class="btn btn-secondary">Kembali</a>
+                <button type="submit" class="btn btn-primary">💾 Simpan Perubahan</button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">✅ Profil berhasil disimpan!</div>
+
+  <script>
+    // ===== HAMBURGER =====
+    document.addEventListener('DOMContentLoaded', function () {
+      const hamburger  = document.getElementById('hamburger');
+      const mainNav    = document.getElementById('mainNav');
+      const navOverlay = document.getElementById('navOverlay');
+
+      function toggleMenu() {
+        const isActive = mainNav.classList.contains('active');
+        hamburger.classList.toggle('active');
+        mainNav.classList.toggle('active');
+        navOverlay.classList.toggle('active');
+        document.body.style.overflow = isActive ? '' : 'hidden';
+      }
+      function closeMenu() {
+        hamburger.classList.remove('active');
+        mainNav.classList.remove('active');
+        navOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+      hamburger.addEventListener('click', toggleMenu);
+      navOverlay.addEventListener('click', closeMenu);
+      mainNav.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', () => { if (window.innerWidth <= 968) closeMenu(); }));
+      window.addEventListener('resize', () => { if (window.innerWidth > 968) closeMenu(); });
+
+      // Init radio styles
+      updateRadio();
+    });
+
+    // ===== LIVE PREVIEW =====
+    function updatePreview() {
+      const nama   = document.getElementById('inputNama').value || 'Baduy';
+      const status = document.getElementById('inputStatus').value || 'Kepala Keluarga';
+      document.getElementById('previewName').textContent  = nama;
+      document.getElementById('previewRole').textContent  = status;
+      document.getElementById('avatarCircle').textContent = nama.charAt(0).toUpperCase();
+    }
+
+    // ===== RADIO STYLE =====
+    function updateRadio() {
+      document.querySelectorAll('.radio-item').forEach(item => {
+        const radio = item.querySelector('input[type="radio"]');
+        item.classList.toggle('checked', radio && radio.checked);
+      });
+    }
+    document.querySelectorAll('.radio-item input').forEach(r => r.addEventListener('change', updateRadio));
+
+    // ===== SAVE =====
+    function simpanProfil(e) {
+      e.preventDefault();
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // ===== RESET =====
+    function resetForm() {
+      if (confirm('Batalkan semua perubahan?')) {
+        document.getElementById('profilForm').reset();
+        updatePreview();
+        updateRadio();
+      }
+    }
+
+    // ===== DANGER RESET =====
+    function confirmReset() {
+      if (confirm('Yakin ingin mereset semua data profil? Tindakan ini tidak dapat dibatalkan.')) {
+        alert('Data telah direset.');
+      }
+    }
+  </script>
+
+</body>
+</html>

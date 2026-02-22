@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Pengaturan Profil | Zakat Masjid</title>
+   <link rel="stylesheet" href="asset/css/style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <h1>Zakat Masjid</h1>
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="Kalkulator">Hitung Zakat</a>
+      <a href="Masjid">Masjid</a>
+      <a href="Beranda">Beranda</a>
+      <a href="Pengaturan">Pengaturan</a>
+    </nav>
+  </header>
+
+  <!-- KONTEN -->
+  <main>
+
+    <h2>Pengaturan Profil</h2>
+    <p>
+      Halaman ini digunakan untuk mengatur data pribadi
+      yang diperlukan dalam perhitungan dan pembayaran zakat.
+    </p>
+
+    <hr>
+
+    <!-- FORM DATA DIRI -->
+    <form>
+
+      <fieldset>
+        <legend><strong>Data Pribadi</strong></legend>
+
+        <label>
+          Nama Kepala Keluarga:
+          <br>
+          <input type="text" placeholder="Contoh: Ahmad Zaki">
+        </label>
+
+        <br><br>
+
+        <label>
+          Status:
+          <br>
+          <select>
+            <option>Muzakki</option>
+            <option>Kepala Keluarga</option>
+          </select>
+        </label>
+
+        <br><br>
+
+        <label>
+          Alamat:
+          <br>
+          <textarea rows="3" placeholder="Alamat singkat tempat tinggal"></textarea>
+        </label>
+      </fieldset>
+
+      <br>
+
+      <!-- DATA ZAKAT -->
+      <fieldset>
+        <legend><strong>Data Zakat</strong></legend>
+
+        <label>
+          Jumlah Anggota Keluarga:
+          <br>
+          <input type="number" min="1">
+        </label>
+
+        <br><br>
+
+        <label>
+          Jenis Zakat yang Dipilih:
+          <br>
+          <select>
+            <option>Beras</option>
+            <option>Uang</option>
+          </select>
+        </label>
+
+        <br><br>
+
+        <label>
+          Status Zakat:
+          <br>
+          <input type="radio" name="status"> Belum Dibayar
+          <br>
+          <input type="radio" name="status"> Sudah Dibayar
+        </label>
+
+      </fieldset>
+
+      <br>
+
+      <!-- CATATAN -->
+      <fieldset>
+        <legend><strong>Catatan</strong></legend>
+
+        <textarea rows="3" placeholder="Catatan tambahan (opsional)"></textarea>
+      </fieldset>
+
+      <br>
+
+      <!-- AKSI -->
+      <button type="submit">Simpan Perubahan</button>
+      <a href="index.html">Kembali ke Dashboard</a>
+
+    </form>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Zakat Masjid</p>
+  </footer>
+
+</body>
+</html>

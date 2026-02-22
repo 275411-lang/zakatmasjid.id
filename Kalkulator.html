@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Zakat Fitrah | Zakat Masjid</title>
+  <link rel="stylesheet" href="asset/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+
+    * { box-sizing: border-box; }
+    body { background: #f5f7f5; }
+
+    /* ===== HEADER ===== */
+    .main-header { background: white; border-bottom: 1px solid var(--neutral-200); position: sticky; top: 0; z-index: 1000; box-shadow: var(--shadow-sm); }
+    .container { max-width: 1400px; margin: 0 auto; padding: 0 var(--space-lg); }
+    .header-content { display: flex; align-items: center; justify-content: space-between; padding: var(--space-md) 0; gap: var(--space-xl); }
+    .logo { display: flex; align-items: center; gap: var(--space-sm); text-decoration: none; }
+    .logo-icon { font-size: 2rem; }
+    .logo h1 { font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; color: var(--primary-green-dark); }
+    .main-nav { display: flex; gap: var(--space-xs); }
+    .nav-link { padding: var(--space-sm) var(--space-lg); color: var(--neutral-600); text-decoration: none; font-weight: 600; border-radius: var(--radius-md); transition: all .2s; }
+    .nav-link:hover { background: rgba(125,155,118,.1); color: var(--primary-green); }
+    .nav-link.active { background: linear-gradient(135deg, var(--primary-green-light), var(--primary-green)); color: white; }
+    .btn-profile { width: 44px; height: 44px; border: none; background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light)); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: var(--space-sm); }
+    .hamburger span { width: 25px; height: 3px; background: var(--primary-green-dark); border-radius: 3px; transition: all .2s; }
+    .nav-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,.5); z-index: 999; }
+
+    /* ===== MAIN ===== */
+    .dashboard-main { padding: var(--space-2xl) 0; min-height: calc(100vh - 80px); }
+
+    /* ===== PAGE HEADER ===== */
+    .page-header {
+      background: white;
+      border-radius: var(--radius-2xl);
+      border: 1px solid var(--neutral-200);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-xl) var(--space-2xl);
+      margin-bottom: var(--space-2xl);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-lg);
+    }
+    .page-header-left { display: flex; align-items: center; gap: var(--space-lg); }
+    .page-header-icon {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));
+      border-radius: var(--radius-lg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.75rem; flex-shrink: 0;
+    }
+    .page-title { font-family: var(--font-display); font-size: 1.75rem; font-weight: 800; color: var(--primary-green-dark); margin-bottom: .25rem; }
+    .page-subtitle { color: var(--neutral-500); font-size: var(--text-sm); }
+
+    .page-header-badges { display: flex; gap: var(--space-sm); flex-wrap: wrap; }
+    .badge {
+      display: inline-flex; align-items: center; gap: .3rem;
+      padding: .3rem .75rem;
+      border-radius: var(--radius-full);
+      font-size: var(--text-xs); font-weight: 700;
+      background: var(--neutral-100); color: var(--neutral-600);
+      border: 1px solid var(--neutral-200);
+    }
+    .badge-green { background: rgba(125,155,118,.12); color: var(--primary-green-dark); border-color: rgba(125,155,118,.25); }
+
+    /* ===== LAYOUT ===== */
+    .calculator-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2xl);
+      align-items: start;
+    }
+    .calculator-form-section { display: flex; flex-direction: column; gap: var(--space-xl); }
+    .calculator-result-section { position: sticky; top: 90px; align-self: start; }
+
+    /* ===== CARD ===== */
+    .card { background: white; border-radius: var(--radius-2xl); box-shadow: var(--shadow-sm); border: 1px solid var(--neutral-200); overflow: hidden; }
+    .card-header { padding: var(--space-lg) var(--space-xl); border-bottom: 1px solid var(--neutral-100); background: linear-gradient(to bottom, rgba(125,155,118,.04), transparent); display: flex; align-items: center; justify-content: space-between; }
+    .card-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--primary-green-dark); }
+    .card-body { padding: var(--space-xl); }
+
+    /* ===== FORM ===== */
+    .form-group { margin-bottom: var(--space-xl); }
+    .form-group:last-of-type { margin-bottom: 0; }
+
+    .form-label { display: flex; align-items: center; gap: var(--space-sm); font-weight: 700; color: var(--neutral-700); margin-bottom: var(--space-sm); font-size: var(--text-sm); }
+    .label-icon { font-size: 1.1rem; }
+    .form-helper { display: block; font-size: var(--text-xs); color: var(--neutral-400); margin-top: .4rem; }
+
+    /* Stepper */
+    .input-stepper {
+      display: flex; align-items: center; gap: var(--space-md);
+      background: var(--neutral-50);
+      padding: .4rem;
+      border-radius: var(--radius-full);
+      border: 2px solid var(--neutral-200);
+      transition: all .2s;
+    }
+    .input-stepper:focus-within { border-color: var(--primary-green); box-shadow: 0 0 0 4px rgba(90,117,83,.1); background: white; }
+    .stepper-btn {
+      width: 48px; height: 48px;
+      border: none;
+      background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));
+      border-radius: 50%;
+      font-size: 1.5rem; font-weight: 700; color: white;
+      cursor: pointer; transition: all .2s;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .stepper-btn:hover { transform: scale(1.08); box-shadow: 0 4px 12px rgba(90,117,83,.35); }
+    .stepper-btn:active { transform: scale(.95); }
+    .stepper-input { flex: 1; text-align: center; font-size: 2rem; font-weight: 700; color: var(--primary-green-dark); border: none; background: transparent; outline: none; font-family: var(--font-display); }
+
+    /* Jiwa label chip */
+    .jiwa-chip {
+      display: flex; align-items: center; gap: var(--space-sm);
+      margin-top: var(--space-sm);
+      flex-wrap: wrap;
+    }
+    .jiwa-quick {
+      padding: .25rem .625rem;
+      border-radius: var(--radius-full);
+      border: 1.5px solid var(--neutral-200);
+      background: white;
+      font-size: var(--text-xs); font-weight: 700; color: var(--neutral-600);
+      cursor: pointer; transition: all .2s;
+    }
+    .jiwa-quick:hover { border-color: var(--primary-green); color: var(--primary-green); background: rgba(125,155,118,.06); }
+
+    /* Radio Cards */
+    .radio-group { display: flex; gap: var(--space-md); }
+    .radio-card { flex: 1; cursor: pointer; }
+    .radio-card input { display: none; }
+    .radio-content {
+      display: flex; align-items: center; gap: var(--space-md);
+      padding: var(--space-lg);
+      border: 2px solid var(--neutral-200);
+      border-radius: var(--radius-xl);
+      transition: all .2s; background: var(--neutral-50);
+    }
+    .radio-card:hover .radio-content { border-color: var(--primary-green-light); background: white; }
+    .radio-card input:checked + .radio-content { border-color: var(--primary-green); background: rgba(90,117,83,.05); box-shadow: 0 0 0 3px rgba(90,117,83,.1); }
+    .radio-icon { font-size: 2rem; }
+    .radio-title { font-weight: 700; color: var(--primary-green-dark); margin-bottom: .2rem; font-size: var(--text-sm); }
+    .radio-desc { font-size: var(--text-xs); color: var(--neutral-500); }
+
+    /* Currency Input */
+    .input-currency {
+      display: flex; align-items: center; gap: var(--space-md);
+      background: var(--neutral-50);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--radius-xl);
+      border: 2px solid var(--neutral-200);
+      transition: all .2s;
+    }
+    .input-currency:focus-within { border-color: var(--primary-green); box-shadow: 0 0 0 4px rgba(90,117,83,.1); background: white; }
+    .currency-symbol { font-weight: 700; color: var(--neutral-400); font-size: 1.1rem; flex-shrink: 0; }
+    .input-currency input { flex: 1; font-size: 1.15rem; font-weight: 600; color: var(--primary-green-dark); border: none; background: transparent; outline: none; }
+    .input-currency input::placeholder { color: var(--neutral-300); }
+
+    /* Price presets */
+    .price-presets { display: flex; gap: var(--space-sm); margin-top: var(--space-sm); flex-wrap: wrap; }
+    .price-chip {
+      padding: .25rem .625rem;
+      border-radius: var(--radius-full);
+      border: 1.5px solid var(--neutral-200);
+      background: white;
+      font-size: var(--text-xs); font-weight: 700; color: var(--neutral-600);
+      cursor: pointer; transition: all .2s;
+    }
+    .price-chip:hover { border-color: var(--primary-green); color: var(--primary-green); }
+
+    /* ===== SUBMIT BTN ===== */
+    .btn-hitung {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));
+      color: white; border: none;
+      padding: var(--space-lg) var(--space-xl);
+      border-radius: var(--radius-full);
+      font-weight: 700; font-size: 1rem;
+      cursor: pointer; transition: all .2s;
+      display: flex; align-items: center; justify-content: center; gap: var(--space-sm);
+      margin-top: var(--space-xl);
+      box-shadow: 0 4px 16px rgba(90,117,83,.2);
+    }
+    .btn-hitung:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(90,117,83,.35); }
+    .btn-hitung:active { transform: translateY(0); }
+
+    /* ===== NIAT CARD ===== */
+    .niat-tabs {
+      display: flex; gap: 0;
+      margin-bottom: var(--space-lg);
+      background: var(--neutral-100);
+      padding: .25rem;
+      border-radius: var(--radius-full);
+    }
+    .niat-tab {
+      flex: 1; padding: .625rem 1rem;
+      border: none; background: transparent;
+      border-radius: var(--radius-full);
+      font-weight: 600; font-size: var(--text-sm);
+      color: var(--neutral-500); cursor: pointer; transition: all .2s; text-align: center;
+    }
+    .niat-tab.active { background: white; color: var(--primary-green); box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+    .niat-content { text-align: center; padding: var(--space-sm) 0; }
+    .niat-arabic { font-size: 1.5rem; line-height: 2.2; margin-bottom: var(--space-md); font-family: 'Amiri', serif; direction: rtl; color: var(--primary-green-dark); background: rgba(125,155,118,.06); padding: var(--space-lg); border-radius: var(--radius-xl); }
+    .niat-latin { font-size: .9rem; line-height: 1.7; margin-bottom: var(--space-sm); color: var(--neutral-700); font-style: italic; }
+    .niat-meaning { font-size: .82rem; color: var(--neutral-500); }
+
+    /* ===== RESULT CARD ===== */
+    .result-card { background: white; border-radius: var(--radius-2xl); box-shadow: var(--shadow-md); border: 1px solid var(--neutral-200); overflow: hidden; }
+    .result-header {
+      background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));
+      padding: var(--space-lg) var(--space-xl);
+      color: white;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .result-title { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; }
+    .result-status {
+      display: inline-flex; align-items: center;
+      padding: .3rem .875rem;
+      background: rgba(255,255,255,.2);
+      border-radius: var(--radius-full);
+      font-size: var(--text-xs); font-weight: 700;
+    }
+
+    .result-body {
+      padding: var(--space-2xl) var(--space-xl);
+      text-align: center; min-height: 280px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .empty-icon { font-size: 3.5rem; display: block; margin-bottom: var(--space-lg); opacity: .25; }
+    .result-empty p { color: var(--neutral-500); line-height: 1.7; font-size: var(--text-sm); }
+    .result-empty strong { color: var(--primary-green); }
+
+    .result-content { padding: var(--space-xl); }
+
+    .result-summary { display: flex; flex-direction: column; gap: var(--space-sm); margin-bottom: var(--space-lg); }
+    .summary-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--neutral-50);
+      border-radius: var(--radius-lg);
+      font-size: var(--text-sm);
+    }
+    .summary-label { color: var(--neutral-500); font-weight: 500; }
+    .summary-value { font-weight: 700; color: var(--primary-green-dark); }
+
+    .result-divider { height: 1px; background: var(--neutral-100); margin: var(--space-lg) 0; }
+
+    .total-item {
+      padding: var(--space-lg) var(--space-xl);
+      border-radius: var(--radius-xl);
+      margin-bottom: var(--space-md);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .total-primary { background: linear-gradient(135deg, var(--primary-green-light), var(--primary-green)); color: white; }
+    .total-secondary { background: linear-gradient(135deg, var(--secondary-gold-light), var(--secondary-gold)); color: white; }
+    .total-label { font-weight: 600; font-size: var(--text-sm); opacity: .9; }
+    .total-value { font-family: var(--font-display); font-size: 1.625rem; font-weight: 700; }
+
+    .result-actions { display: flex; flex-direction: column; gap: var(--space-md); margin-top: var(--space-xl); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));
+      color: white; border: none;
+      padding: var(--space-md) var(--space-xl);
+      border-radius: var(--radius-full);
+      font-weight: 700; font-size: var(--text-sm);
+      cursor: pointer; transition: all .2s;
+      display: inline-flex; align-items: center; justify-content: center; gap: var(--space-sm);
+      text-decoration: none;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(90,117,83,.3); }
+    .btn-secondary {
+      background: white; color: var(--primary-green);
+      border: 2px solid var(--primary-green);
+      padding: var(--space-md) var(--space-xl);
+      border-radius: var(--radius-full);
+      font-weight: 700; font-size: var(--text-sm);
+      cursor: pointer; transition: all .2s;
+      display: inline-flex; align-items: center; justify-content: center; gap: var(--space-sm);
+      text-decoration: none;
+    }
+    .btn-secondary:hover { background: var(--primary-green); color: white; }
+    .btn-block { width: 100%; }
+
+    /* ===== PAYMENT MODAL ===== */
+    .payment-modal {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.5); z-index: 2000;
+      align-items: flex-start; justify-content: center;
+      backdrop-filter: blur(4px);
+      padding: 1.5rem 1rem; overflow-y: auto;
+    }
+    .payment-modal.active { display: flex; }
+    .payment-modal-content {
+      background: white; border-radius: 24px;
+      max-width: 620px; width: 100%;
+      box-shadow: 0 25px 50px rgba(0,0,0,.2);
+      animation: modalSlideUp .28s cubic-bezier(.34,1.56,.64,1);
+      overflow: hidden; margin: auto;
+    }
+    @keyframes modalSlideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+    .payment-modal-header {
+      padding: var(--space-lg) var(--space-xl);
+      border-bottom: 1px solid var(--neutral-200);
+      display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));
+      color: white;
+    }
+    .payment-modal-header h3 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; }
+    .payment-modal-close { background: transparent; border: none; font-size: 1.25rem; cursor: pointer; color: white; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background .2s; }
+    .payment-modal-close:hover { background: rgba(255,255,255,.2); }
+    .payment-modal-body { padding: var(--space-xl); max-height: 70vh; overflow-y: auto; }
+
+    .modal-section-label { font-size: var(--text-xs); font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--neutral-400); margin-bottom: var(--space-md); }
+
+    /* Masjid Selector */
+    .masjid-selector { display: flex; flex-direction: column; gap: var(--space-sm); margin-bottom: var(--space-lg); }
+    .masjid-option {
+      display: flex; align-items: center; gap: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
+      border: 2px solid var(--neutral-200);
+      border-radius: var(--radius-xl); cursor: pointer; transition: all .2s;
+      background: var(--neutral-50);
+    }
+    .masjid-option:hover { border-color: var(--primary-green-light); background: white; box-shadow: var(--shadow-sm); }
+    .masjid-option.selected { border-color: var(--primary-green); background: rgba(90,117,83,.04); }
+    .masjid-option-icon { width: 44px; height: 44px; background: linear-gradient(135deg, rgba(125,155,118,.15), rgba(90,117,83,.08)); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .masjid-option-info { flex: 1; }
+    .masjid-option-name { font-weight: 700; color: var(--primary-green-dark); margin-bottom: .2rem; font-size: var(--text-sm); display: flex; align-items: center; flex-wrap: wrap; gap: .3rem; }
+    .masjid-option-address { font-size: var(--text-xs); color: var(--neutral-500); }
+    .masjid-option-distance { font-size: var(--text-xs); font-weight: 700; color: var(--primary-green); background: var(--neutral-100); padding: .25rem .625rem; border-radius: var(--radius-full); white-space: nowrap; flex-shrink: 0; }
+    .online-badge { background: var(--success-light); color: var(--success); font-size: var(--text-xs); font-weight: 700; padding: .15rem .5rem; border-radius: var(--radius-full); }
+
+    /* Payment Methods */
+    .payment-methods { display: flex; gap: var(--space-sm); margin-bottom: var(--space-lg); }
+    .payment-method-card { flex: 1; border: 2px solid var(--neutral-200); border-radius: var(--radius-xl); padding: var(--space-lg); text-align: center; cursor: pointer; transition: all .2s; background: var(--neutral-50); }
+    .payment-method-card:hover { border-color: var(--primary-green-light); background: white; }
+    .payment-method-card.selected { border-color: var(--primary-green); background: rgba(90,117,83,.04); }
+    .payment-method-icon { font-size: 1.75rem; margin-bottom: var(--space-xs); }
+    .payment-method-name { font-weight: 700; color: var(--primary-green-dark); font-size: var(--text-sm); margin-bottom: .2rem; }
+    .payment-method-desc { font-size: var(--text-xs); color: var(--neutral-400); }
+
+    /* QRIS */
+    .qris-section { background: rgba(125,155,118,.06); border-radius: var(--radius-xl); padding: var(--space-xl); border: 2px dashed rgba(125,155,118,.3); margin-top: var(--space-md); text-align: center; }
+    .qris-code-container { background: white; border-radius: var(--radius-xl); padding: var(--space-lg); margin-bottom: var(--space-md); border: 1px solid var(--neutral-200); }
+    #qrisCode { display: flex; justify-content: center; margin: var(--space-sm) 0; }
+    #qrisCode canvas { border-radius: var(--radius-md); box-shadow: var(--shadow-sm); width: 180px; height: 180px; }
+    .qris-merchant-name { font-weight: 700; color: var(--primary-green-dark); margin: var(--space-sm) 0 .25rem; }
+    .qris-amount { font-size: 1.375rem; font-weight: 800; color: var(--primary-green); }
+    .qris-note { font-size: var(--text-xs); color: var(--neutral-500); margin-top: var(--space-xs); }
+
+    /* Transfer */
+    .transfer-section { background: var(--neutral-50); border-radius: var(--radius-xl); padding: var(--space-lg); border: 1px solid var(--neutral-200); margin-top: var(--space-md); }
+    .bank-list { display: flex; flex-direction: column; gap: var(--space-sm); }
+    .bank-item { display: flex; align-items: center; gap: var(--space-md); padding: var(--space-md) var(--space-lg); background: white; border-radius: var(--radius-lg); border: 1px solid var(--neutral-200); }
+    .bank-logo { width: 44px; height: 44px; background: var(--primary-green); color: white; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: .9rem; flex-shrink: 0; }
+    .bank-details { flex: 1; }
+    .bank-name { font-weight: 700; color: var(--primary-green-dark); font-size: var(--text-sm); }
+    .bank-account { font-size: var(--text-sm); font-weight: 600; color: var(--neutral-800); margin: .2rem 0; }
+    .bank-account-name { font-size: var(--text-xs); color: var(--neutral-500); }
+    .copy-btn { padding: .375rem .875rem; background: var(--neutral-100); border: 1px solid var(--neutral-200); border-radius: var(--radius-md); font-size: var(--text-xs); font-weight: 600; cursor: pointer; transition: all .2s; flex-shrink: 0; }
+    .copy-btn:hover { background: var(--primary-green-light); color: white; border-color: var(--primary-green); }
+
+    .confirm-payment-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));
+      color: white; border: none;
+      padding: var(--space-md) var(--space-xl);
+      border-radius: var(--radius-full);
+      font-weight: 700; font-size: var(--text-sm);
+      cursor: pointer; transition: all .2s;
+      margin-top: var(--space-md);
+    }
+    .confirm-payment-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(90,117,83,.35); }
+    .confirm-payment-btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+    .check-status-btn { width: 100%; background: white; color: var(--primary-green); border: 2px solid var(--primary-green); padding: var(--space-md); border-radius: var(--radius-full); font-weight: 700; font-size: var(--text-sm); cursor: pointer; transition: all .2s; margin-top: var(--space-md); display: flex; align-items: center; justify-content: center; gap: var(--space-sm); }
+    .check-status-btn:hover { background: var(--primary-green); color: white; }
+
+    .modal-nav-row { display: flex; gap: var(--space-sm); margin-top: var(--space-lg); }
+    .modal-nav-row .btn-secondary, .modal-nav-row .btn-primary { flex: 1; padding: var(--space-md); font-size: var(--text-sm); }
+
+    /* Toast */
+    .toast-notification {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      background: var(--primary-green-dark); color: white;
+      border-radius: var(--radius-xl);
+      padding: var(--space-md) var(--space-xl);
+      box-shadow: var(--shadow-lg);
+      display: flex; align-items: center; gap: var(--space-sm);
+      z-index: 3000; animation: slideInRight .3s ease-out;
+      font-weight: 600; font-size: var(--text-sm);
+    }
+    @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    .hidden { display: none !important; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 968px) {
+      .calculator-layout { grid-template-columns: 1fr; gap: var(--space-xl); }
+      .calculator-result-section { position: static; }
+      .radio-group { flex-direction: column; }
+      .hamburger { display: flex; }
+      .main-nav { position: fixed; top: 0; right: -100%; width: 280px; height: 100vh; background: white; flex-direction: column; padding: 80px 20px 20px; transition: right .3s; z-index: 1000; box-shadow: var(--shadow-xl); }
+      .main-nav.active { right: 0; }
+      .nav-overlay.active { display: block; }
+      .page-header { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 600px) {
+      .payment-modal-content { max-width: 100%; }
+      .payment-methods { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="main-header">
+    <div class="container">
+      <div class="header-content">
+        <a href="dashboard.html" class="logo">
+          <span class="logo-icon">🕌</span>
+          <h1>Zakat Masjid</h1>
+        </a>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+        <nav class="main-nav" id="mainNav">
+          <a href="dashboard.html" class="nav-link">Dashboard</a>
+          <a href="Kalkulator.html" class="nav-link active">Hitung Zakat</a>
+          <a href="masjid.html" class="nav-link">Masjid</a>
+          <a href="Edukasi.html" class="nav-link">Panduan</a>
+        </nav>
+        <button class="btn-profile" aria-label="Profil">
+          <span class="avatar-small">B</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="nav-overlay" id="navOverlay"></div>
+
+  <!-- MAIN -->
+  <main class="dashboard-main">
+    <div class="container">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="page-header-left">
+          <div class="page-header-icon">🧮</div>
+          <div>
+            <h1 class="page-title">Hitung Zakat</h1>
+            <p class="page-subtitle">Hitung kewajiban zakat fitrah dengan mudah dan akurat</p>
+          </div>
+        </div>
+        <div class="page-header-badges">
+          <span class="badge badge-green">🌾 2,5 kg / jiwa</span>
+          <span class="badge">📅 Ramadan 1447 H</span>
+        </div>
+      </div>
+
+      <!-- Calculator Layout -->
+      <div class="calculator-layout">
+
+        <!-- LEFT: Form + Niat -->
+        <div class="calculator-form-section">
+
+          <!-- Form Card -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">📋 Data Perhitungan</h3>
+            </div>
+            <div class="card-body">
+              <form id="zakatForm">
+
+                <!-- Jumlah Jiwa -->
+                <div class="form-group">
+                  <label class="form-label">
+                    <span class="label-icon">👥</span> Jumlah Anggota Keluarga
+                  </label>
+                  <div class="input-stepper">
+                    <button type="button" class="stepper-btn" id="decreaseBtn">−</button>
+                    <input type="number" id="jumlahJiwa" value="4" min="1" max="50" class="stepper-input">
+                    <button type="button" class="stepper-btn" id="increaseBtn">+</button>
+                  </div>
+                  <div class="jiwa-chip">
+                    <span style="font-size:var(--text-xs);color:var(--neutral-400);font-weight:600;">Cepat pilih:</span>
+                    <button type="button" class="jiwa-quick" onclick="setJiwa(1)">1</button>
+                    <button type="button" class="jiwa-quick" onclick="setJiwa(2)">2</button>
+                    <button type="button" class="jiwa-quick" onclick="setJiwa(3)">3</button>
+                    <button type="button" class="jiwa-quick" onclick="setJiwa(4)">4</button>
+                    <button type="button" class="jiwa-quick" onclick="setJiwa(5)">5</button>
+                    <button type="button" class="jiwa-quick" onclick="setJiwa(6)">6+</button>
+                  </div>
+                  <span class="form-helper">Termasuk kepala keluarga dan seluruh tanggungan</span>
+                </div>
+
+                <!-- Jenis Zakat -->
+                <div class="form-group">
+                  <label class="form-label">
+                    <span class="label-icon">🌾</span> Jenis Pembayaran
+                  </label>
+                  <div class="radio-group">
+                    <label class="radio-card">
+                      <input type="radio" name="jenisZakat" value="beras" checked>
+                      <div class="radio-content">
+                        <span class="radio-icon">🌾</span>
+                        <div>
+                          <div class="radio-title">Beras</div>
+                          <div class="radio-desc">2,5 kg per jiwa</div>
+                        </div>
+                      </div>
+                    </label>
+                    <label class="radio-card">
+                      <input type="radio" name="jenisZakat" value="uang" id="uangRadio">
+                      <div class="radio-content">
+                        <span class="radio-icon">💰</span>
+                        <div>
+                          <div class="radio-title">Uang</div>
+                          <div class="radio-desc">Setara harga beras</div>
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Harga Beras -->
+                <div class="form-group">
+                  <label class="form-label">
+                    <span class="label-icon">💵</span> Harga Beras per Kg
+                  </label>
+                  <div class="input-currency">
+                    <span class="currency-symbol">Rp</span>
+                    <input type="number" id="hargaBeras" value="12000" min="1000" step="500" placeholder="Ketik harga">
+                  </div>
+                  <div class="price-presets">
+                    <span style="font-size:var(--text-xs);color:var(--neutral-400);font-weight:600;">Preset:</span>
+                    <button type="button" class="price-chip" onclick="setHarga(10000)">Rp 10.000</button>
+                    <button type="button" class="price-chip" onclick="setHarga(12000)">Rp 12.000</button>
+                    <button type="button" class="price-chip" onclick="setHarga(14000)">Rp 14.000</button>
+                    <button type="button" class="price-chip" onclick="setHarga(15000)">Rp 15.000</button>
+                  </div>
+                  <span class="form-helper">Sesuaikan dengan harga beras di pasar setempat</span>
+                </div>
+
+                <button type="submit" class="btn-hitung">
+                  🧮 Hitung Zakat Sekarang
+                </button>
+
+              </form>
+            </div>
+          </div>
+
+          <!-- Niat Card -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">🤲 Niat Zakat Fitrah</h3>
+            </div>
+            <div class="card-body">
+              <div class="niat-tabs">
+                <button class="niat-tab active" id="niatTabDiri">Untuk Diri Sendiri</button>
+                <button class="niat-tab" id="niatTabKeluarga">Untuk Keluarga</button>
+              </div>
+              <div class="niat-content">
+                <p class="niat-arabic" id="niatArabic">نَوَيْتُ أَنْ أُخْرِجَ زَكَاةَ الْفِطْرِ عَنْ نَفْسِي فَرْضًا لِلَّهِ تَعَالَى</p>
+                <p class="niat-latin" id="niatLatin">Nawaitu an ukhrija zakaatal fitri 'an nafsi fardhan lillaahi ta'aalaa</p>
+                <p class="niat-meaning" id="niatMeaning">"Aku niat mengeluarkan zakat fitrah untuk diriku, fardu karena Allah Ta'ala."</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Result (sticky) -->
+        <div class="calculator-result-section">
+          <div class="result-card">
+            <div class="result-header">
+              <h3 class="result-title">Hasil Perhitungan</h3>
+              <span class="result-status" id="resultStatus">Belum Dihitung</span>
+            </div>
+
+            <div class="result-body" id="resultBody">
+              <div class="result-empty">
+                <span class="empty-icon">📊</span>
+                <p>Isi data di sebelah kiri<br>lalu tekan <strong>"Hitung Zakat Sekarang"</strong></p>
+              </div>
+            </div>
+
+            <div class="result-content" id="resultContent" style="display:none;">
+              <div class="result-summary">
+                <div class="summary-row">
+                  <span class="summary-label">👥 Jumlah Jiwa</span>
+                  <span class="summary-value" id="displayJiwa">-</span>
+                </div>
+                <div class="summary-row">
+                  <span class="summary-label">📦 Jenis Zakat</span>
+                  <span class="summary-value" id="displayJenis">-</span>
+                </div>
+                <div class="summary-row">
+                  <span class="summary-label">💵 Harga Beras/Kg</span>
+                  <span class="summary-value" id="displayHarga">-</span>
+                </div>
+              </div>
+
+              <div class="result-divider"></div>
+
+              <div id="totalBerasContainer" style="display:none;">
+                <div class="total-item total-primary">
+                  <span class="total-label">🌾 Total Beras</span>
+                  <span class="total-value" id="totalBeras">-</span>
+                </div>
+              </div>
+
+              <div id="totalUangContainer" style="display:none;">
+                <div class="total-item total-secondary">
+                  <span class="total-label">💰 Setara Uang</span>
+                  <span class="total-value" id="totalUang">-</span>
+                </div>
+              </div>
+
+              <div class="result-actions" id="paymentButtonContainer" style="display:none;">
+                <button class="btn-primary btn-block" id="payBtn">
+                  💳 Pilih Metode Pembayaran Online
+                </button>
+                <a href="masjid.html" class="btn-secondary btn-block">
+                  🕌 Lihat Masjid Terdekat
+                </a>
+              </div>
+
+              <div class="result-actions" id="berasButtonContainer" style="display:none;">
+                <a href="masjid.html" class="btn-primary btn-block">
+                  🕌 Cari Masjid Penerima Beras
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- PAYMENT MODAL -->
+  <div class="payment-modal" id="paymentModal">
+    <div class="payment-modal-content">
+      <div class="payment-modal-header">
+        <h3>💳 Pilih Metode Pembayaran</h3>
+        <button class="payment-modal-close" onclick="closePaymentModal()">✕</button>
+      </div>
+      <div class="payment-modal-body">
+
+        <!-- Step 1: Pilih Masjid -->
+        <div id="step1Content">
+          <div class="modal-section-label">🕌 Pilih Masjid Tujuan</div>
+          <div class="masjid-selector" id="masjidSelector">
+            <div class="masjid-option" onclick="selectMasjid(1,'Masjid Al-Falah','Jl. Merdeka No. 10','1.2 km',true,true)">
+              <div class="masjid-option-icon">🕌</div>
+              <div class="masjid-option-info">
+                <div class="masjid-option-name">Masjid Al-Falah <span class="online-badge">QRIS+Transfer</span></div>
+                <div class="masjid-option-address">Jl. Merdeka No. 10, Balikpapan</div>
+              </div>
+              <div class="masjid-option-distance">1.2 km</div>
+            </div>
+            <div class="masjid-option" onclick="selectMasjid(2,'Masjid Baitul Haq','Jl. Sudirman No. 22','2.4 km',true,true)">
+              <div class="masjid-option-icon">🕌</div>
+              <div class="masjid-option-info">
+                <div class="masjid-option-name">Masjid Baitul Haq <span class="online-badge">QRIS+Transfer</span></div>
+                <div class="masjid-option-address">Jl. Sudirman No. 22, Balikpapan</div>
+              </div>
+              <div class="masjid-option-distance">2.4 km</div>
+            </div>
+            <div class="masjid-option" onclick="selectMasjid(3,'Masjid Istiqlal Baru','Jl. Pandan No. 18','6.3 km',true,false)">
+              <div class="masjid-option-icon">🕌</div>
+              <div class="masjid-option-info">
+                <div class="masjid-option-name">Masjid Istiqlal Baru <span class="online-badge">QRIS</span></div>
+                <div class="masjid-option-address">Jl. Pandan No. 18, Balikpapan</div>
+              </div>
+              <div class="masjid-option-distance">6.3 km</div>
+            </div>
+            <div class="masjid-option" onclick="selectMasjid(4,'Masjid Ar-Rahman','Jl. Ahmad Yani No. 7','4.8 km',false,true)">
+              <div class="masjid-option-icon">🕌</div>
+              <div class="masjid-option-info">
+                <div class="masjid-option-name">Masjid Ar-Rahman <span class="online-badge">Transfer</span></div>
+                <div class="masjid-option-address">Jl. Ahmad Yani No. 7, Balikpapan</div>
+              </div>
+              <div class="masjid-option-distance">4.8 km</div>
+            </div>
+          </div>
+          <button class="confirm-payment-btn" id="nextToStep2" disabled onclick="goToStep2()">
+            Lanjut ke Metode Pembayaran →
+          </button>
+        </div>
+
+        <!-- Step 2: Metode Pembayaran -->
+        <div id="step2Content" style="display:none;">
+          <div class="modal-section-label">💳 Pilih Metode Pembayaran</div>
+          <div class="payment-methods" id="paymentMethodsContainer">
+            <div class="payment-method-card" id="qrisMethod" onclick="selectPaymentMethod('qris')">
+              <div class="payment-method-icon">📱</div>
+              <div class="payment-method-name">QRIS</div>
+              <div class="payment-method-desc">Scan langsung</div>
+            </div>
+            <div class="payment-method-card" id="transferMethod" onclick="selectPaymentMethod('transfer')">
+              <div class="payment-method-icon">🏦</div>
+              <div class="payment-method-name">Transfer Bank</div>
+              <div class="payment-method-desc">BSI / BRI / BCA</div>
+            </div>
+          </div>
+
+          <div id="qrisSection" style="display:none;">
+            <div class="qris-section">
+              <div class="qris-code-container">
+                <div id="qrisCode"></div>
+                <div class="qris-merchant-name" id="qrisMerchantName">Masjid Al-Falah</div>
+                <div class="qris-amount" id="qrisAmount">Rp 0</div>
+                <div class="qris-note">Scan QRIS dengan GoPay / OVO / DANA / m-Banking</div>
+              </div>
+              <div style="display:flex;gap:var(--space-sm);">
+                <button class="btn-secondary" style="flex:1;padding:var(--space-sm);" onclick="downloadQRIS()">⬇️ Download</button>
+              </div>
+              <button class="check-status-btn" onclick="checkPaymentStatus()">🔍 Cek Status Pembayaran</button>
+            </div>
+          </div>
+
+          <div id="transferSection" style="display:none;">
+            <div class="transfer-section">
+              <div class="modal-section-label" style="margin-bottom:var(--space-md);">Rekening Masjid</div>
+              <div class="bank-list">
+                <div class="bank-item">
+                  <div class="bank-logo">BSI</div>
+                  <div class="bank-details">
+                    <div class="bank-name">Bank Syariah Indonesia</div>
+                    <div class="bank-account">7100 2234 567</div>
+                    <div class="bank-account-name">a.n. Yayasan Masjid Al-Falah</div>
+                  </div>
+                  <button class="copy-btn" onclick="copyToClipboard('71002234567')">Salin</button>
+                </div>
+                <div class="bank-item">
+                  <div class="bank-logo">BRI</div>
+                  <div class="bank-details">
+                    <div class="bank-name">Bank BRI</div>
+                    <div class="bank-account">0029 0100 5567 509</div>
+                    <div class="bank-account-name">a.n. Yayasan Masjid Al-Falah</div>
+                  </div>
+                  <button class="copy-btn" onclick="copyToClipboard('0029010055675099')">Salin</button>
+                </div>
+              </div>
+              <div style="margin-top:var(--space-md);padding:var(--space-md);background:var(--warning-light);border-radius:var(--radius-lg);font-size:var(--text-xs);">
+                <strong>📌 Konfirmasi:</strong> Transfer sesuai nominal & kirim bukti ke WA 0812-3456-7890
+              </div>
+            </div>
+            <button class="check-status-btn" id="transferCheckStatusBtn" onclick="checkPaymentStatus()" style="display:none;">🔍 Cek Status</button>
+          </div>
+
+          <div class="modal-nav-row">
+            <button class="btn-secondary" onclick="backToStep1()">← Kembali</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Selesai -->
+        <div id="step3Content" style="display:none;text-align:center;padding:var(--space-2xl) 0;">
+          <div style="font-size:3rem;margin-bottom:var(--space-lg);">✅</div>
+          <h3 style="font-family:var(--font-display);color:var(--primary-green-dark);margin-bottom:var(--space-md);">Status Pembayaran</h3>
+          <p style="color:var(--neutral-500);font-size:var(--text-sm);line-height:1.7;margin-bottom:var(--space-xl);">Pembayaran Anda sedang diproses.<br>Status akan diperbarui dalam 1×24 jam.</p>
+          <button class="confirm-payment-btn" onclick="closePaymentModalAndReset()">Tutup</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== HAMBURGER =====
+    document.addEventListener('DOMContentLoaded', function () {
+      const hamburger  = document.getElementById('hamburger');
+      const mainNav    = document.getElementById('mainNav');
+      const navOverlay = document.getElementById('navOverlay');
+      function toggleMenu() { const a = mainNav.classList.contains('active'); hamburger.classList.toggle('active'); mainNav.classList.toggle('active'); navOverlay.classList.toggle('active'); document.body.style.overflow = a ? '' : 'hidden'; }
+      function closeMenu() { hamburger.classList.remove('active'); mainNav.classList.remove('active'); navOverlay.classList.remove('active'); document.body.style.overflow = ''; }
+      hamburger.addEventListener('click', toggleMenu);
+      navOverlay.addEventListener('click', closeMenu);
+      mainNav.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', () => { if (window.innerWidth <= 968) closeMenu(); }));
+      window.addEventListener('resize', () => { if (window.innerWidth > 968) closeMenu(); });
+    });
+
+    // ===== HELPERS =====
+    function setJiwa(n) { document.getElementById('jumlahJiwa').value = n; }
+    function setHarga(n) { document.getElementById('hargaBeras').value = n; }
+
+    // ===== STEPPER =====
+    document.getElementById('decreaseBtn').addEventListener('click', () => {
+      const el = document.getElementById('jumlahJiwa');
+      if (+el.value > 1) el.value = +el.value - 1;
+    });
+    document.getElementById('increaseBtn').addEventListener('click', () => {
+      const el = document.getElementById('jumlahJiwa');
+      if (+el.value < 50) el.value = +el.value + 1;
+    });
+
+    // ===== NIAT TABS =====
+    const niatData = {
+      diri: {
+        arabic: 'نَوَيْتُ أَنْ أُخْرِجَ زَكَاةَ الْفِطْرِ عَنْ نَفْسِي فَرْضًا لِلَّهِ تَعَالَى',
+        latin: "Nawaitu an ukhrija zakaatal fitri 'an nafsi fardhan lillaahi ta'aalaa",
+        meaning: '"Aku niat mengeluarkan zakat fitrah untuk diriku, fardu karena Allah Ta\'ala."'
+      },
+      keluarga: {
+        arabic: 'نَوَيْتُ أَنْ أُخْرِجَ زَكَاةَ الْفِطْرِ عَنْ جَمِيعِ مَا يَلْزَمُنِي نَفَقَاتُهُمْ فَرْضًا لِلَّهِ تَعَالَى',
+        latin: "Nawaitu an ukhrija zakaatal fitri 'an jami'i maa yalzamunii nafaqaatuhum fardhan lillaahi ta'aalaa",
+        meaning: '"Aku niat mengeluarkan zakat fitrah untuk semua yang wajib aku nafkahi, fardu karena Allah Ta\'ala."'
+      }
+    };
+    document.getElementById('niatTabDiri').addEventListener('click', () => { switchNiat('diri'); });
+    document.getElementById('niatTabKeluarga').addEventListener('click', () => { switchNiat('keluarga'); });
+    function switchNiat(type) {
+      document.querySelectorAll('.niat-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(type === 'diri' ? 'niatTabDiri' : 'niatTabKeluarga').classList.add('active');
+      document.getElementById('niatArabic').textContent = niatData[type].arabic;
+      document.getElementById('niatLatin').textContent  = niatData[type].latin;
+      document.getElementById('niatMeaning').textContent = niatData[type].meaning;
+    }
+
+    // ===== FORM =====
+    document.getElementById('zakatForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const jiwa  = parseInt(document.getElementById('jumlahJiwa').value) || 1;
+      const harga = parseInt(document.getElementById('hargaBeras').value) || 12000;
+      const jenis = document.querySelector('input[name="jenisZakat"]:checked').value;
+
+      const berasTotal = jiwa * 2.5;
+      const uangTotal  = jiwa * 2.5 * harga;
+
+      document.getElementById('displayJiwa').textContent  = jiwa + ' jiwa';
+      document.getElementById('displayJenis').textContent = jenis === 'beras' ? '🌾 Beras' : '💰 Uang';
+      document.getElementById('displayHarga').textContent = 'Rp ' + harga.toLocaleString('id-ID');
+
+      document.getElementById('totalBerasContainer').style.display   = 'none';
+      document.getElementById('totalUangContainer').style.display    = 'none';
+      document.getElementById('paymentButtonContainer').style.display = 'none';
+      document.getElementById('berasButtonContainer').style.display  = 'none';
+
+      if (jenis === 'beras') {
+        document.getElementById('totalBeras').textContent = berasTotal + ' kg';
+        document.getElementById('totalBerasContainer').style.display = 'block';
+        document.getElementById('berasButtonContainer').style.display = 'block';
+      } else {
+        document.getElementById('totalUang').textContent = 'Rp ' + uangTotal.toLocaleString('id-ID');
+        document.getElementById('totalUangContainer').style.display = 'block';
+        document.getElementById('paymentButtonContainer').style.display = 'block';
+        window.currentTotalUang = uangTotal;
+      }
+
+      document.getElementById('resultBody').style.display    = 'none';
+      document.getElementById('resultContent').style.display = 'block';
+      document.getElementById('resultStatus').textContent    = 'Sudah Dihitung';
+      document.getElementById('resultStatus').style.background = 'rgba(255,255,255,.25)';
+    });
+
+    // ===== PAYMENT MODAL =====
+    let selectedMasjidId = null, selectedMasjidName = '', selectedPaymentMethod = null;
+    let masjidSupportQRIS = false, masjidSupportTransfer = false;
+
+    document.getElementById('payBtn').addEventListener('click', showPaymentModal);
+
+    function showPaymentModal() { document.getElementById('paymentModal').classList.add('active'); document.body.style.overflow = 'hidden'; resetToStep1(); }
+    function closePaymentModal() { document.getElementById('paymentModal').classList.remove('active'); document.body.style.overflow = ''; resetToStep1(); }
+    function closePaymentModalAndReset() {
+      closePaymentModal();
+      document.getElementById('resultBody').style.display    = 'flex';
+      document.getElementById('resultContent').style.display = 'none';
+      document.getElementById('resultStatus').textContent = 'Belum Dihitung';
+      document.getElementById('resultStatus').style.background = 'rgba(255,255,255,.2)';
+    }
+
+    function resetToStep1() {
+      document.getElementById('step1Content').style.display = 'block';
+      document.getElementById('step2Content').style.display = 'none';
+      document.getElementById('step3Content').style.display = 'none';
+      selectedMasjidId = null; selectedPaymentMethod = null;
+      document.querySelectorAll('.masjid-option').forEach(o => o.classList.remove('selected'));
+      document.getElementById('nextToStep2').disabled = true;
+    }
+
+    function selectMasjid(id, name, addr, dist, qris, transfer) {
+      selectedMasjidId = id; selectedMasjidName = name;
+      masjidSupportQRIS = qris; masjidSupportTransfer = transfer;
+      document.querySelectorAll('.masjid-option').forEach(o => o.classList.remove('selected'));
+      event.currentTarget.classList.add('selected');
+      document.getElementById('nextToStep2').disabled = false;
+    }
+
+    function goToStep2() {
+      document.getElementById('step1Content').style.display = 'none';
+      document.getElementById('step2Content').style.display = 'block';
+      document.getElementById('qrisMethod').style.display     = masjidSupportQRIS ? 'block' : 'none';
+      document.getElementById('transferMethod').style.display = masjidSupportTransfer ? 'block' : 'none';
+      document.getElementById('transferCheckStatusBtn').style.display = 'none';
+      selectedPaymentMethod = null;
+      document.querySelectorAll('.payment-method-card').forEach(c => c.classList.remove('selected'));
+      document.getElementById('qrisSection').style.display    = 'none';
+      document.getElementById('transferSection').style.display = 'none';
+    }
+
+    function backToStep1() { document.getElementById('step1Content').style.display = 'block'; document.getElementById('step2Content').style.display = 'none'; }
+
+    function selectPaymentMethod(method) {
+      selectedPaymentMethod = method;
+      document.querySelectorAll('.payment-method-card').forEach(c => c.classList.remove('selected'));
+      event.currentTarget.classList.add('selected');
+      if (method === 'qris') {
+        document.getElementById('qrisSection').style.display    = 'block';
+        document.getElementById('transferSection').style.display = 'none';
+        document.getElementById('transferCheckStatusBtn').style.display = 'none';
+        generateQRIS();
+      } else {
+        document.getElementById('qrisSection').style.display    = 'none';
+        document.getElementById('transferSection').style.display = 'block';
+        document.getElementById('transferCheckStatusBtn').style.display = 'block';
+      }
+    }
+
+    function generateQRIS() {
+      const amt = window.currentTotalUang || 0;
+      const qrisData = `00020101021126680016COM.NOBUBANK.WWW01189360050300000899140215ID.ALFALAH.QRIS0209168MERCHANT0303UME52040000530336054${amt}5502035658021D5925${selectedMasjidName}6010BALIKPAPAN6105123456304`;
+      document.getElementById('qrisAmount').textContent = 'Rp ' + amt.toLocaleString('id-ID');
+      document.getElementById('qrisMerchantName').textContent = selectedMasjidName;
+      const cont = document.getElementById('qrisCode');
+      cont.innerHTML = '';
+      QRCode.toCanvas(document.createElement('canvas'), qrisData, { width: 180, margin: 2 }, (err, canvas) => { if (!err) cont.appendChild(canvas); });
+    }
+
+    function downloadQRIS() {
+      const canvas = document.querySelector('#qrisCode canvas');
+      if (!canvas) return;
+      const a = document.createElement('a');
+      a.download = `QRIS_${selectedMasjidName}.png`;
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+      showToast('QRIS berhasil di-download');
+    }
+
+    function checkPaymentStatus() {
+      document.getElementById('step1Content').style.display = 'none';
+      document.getElementById('step2Content').style.display = 'none';
+      document.getElementById('step3Content').style.display = 'block';
+      showToast('Memeriksa status pembayaran...');
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => showToast('Nomor rekening disalin ✓'));
+    }
+
+    function showToast(msg) {
+      const t = document.createElement('div');
+      t.className = 'toast-notification';
+      t.innerHTML = `<span>✅</span><span>${msg}</span>`;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 3000);
+    }
+
+    window.addEventListener('click', e => { if (e.target === document.getElementById('paymentModal')) closePaymentModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closePaymentModal(); });
+  </script>
+
+</body>
+</html>

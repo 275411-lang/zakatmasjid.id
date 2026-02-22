@@ -1,0 +1,354 @@
+/* ===========================
+   panduan.css (edukasi.css)
+   Styles untuk halaman Panduan Zakat.
+   style.css (global) tetap di-load terpisah.
+   =========================== */
+
+/* ───────────────────────────
+   CONTENT SECTION (artikel)
+   ─────────────────────────── */
+.content-section {
+  margin-bottom: var(--space-3xl);
+}
+
+.content-section-title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--primary-green-dark);
+  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.content-section-icon {
+  font-size: var(--text-3xl);
+}
+
+.content-section p {
+  line-height: 1.8;
+  color: var(--neutral-700);
+  margin-bottom: var(--space-md);
+}
+
+.content-section ul,
+.content-section ol {
+  margin-left: var(--space-xl);
+  margin-bottom: var(--space-md);
+}
+
+.content-section li {
+  line-height: 1.8;
+  color: var(--neutral-700);
+  margin-bottom: var(--space-sm);
+}
+
+/* ───────────────────────────
+   HIGHLIGHT BOX (callout)
+   ─────────────────────────── */
+.highlight-box {
+  padding: var(--space-xl);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--space-xl);
+  border-left: 4px solid var(--primary-green);
+  background: linear-gradient(135deg, rgba(125, 155, 118, 0.08), rgba(90, 117, 83, 0.04));
+}
+
+.highlight-box-icon {
+  font-size: var(--text-3xl);
+  display: block;
+  margin-bottom: var(--space-md);
+}
+
+.highlight-box-title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--primary-green-dark);
+  margin-bottom: var(--space-sm);
+}
+
+.highlight-box p {
+  line-height: 1.7;
+  color: var(--neutral-700);
+}
+
+.highlight-box.warning {
+  border-left-color: var(--warning);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(245, 158, 11, 0.04));
+}
+
+.highlight-box.info {
+  border-left-color: var(--info);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(59, 130, 246, 0.04));
+}
+
+/* ───────────────────────────
+   CALCULATION TABLE
+   ─────────────────────────── */
+.calc-table-wrapper {
+  overflow-x: auto;
+  margin-bottom: var(--space-xl);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.calc-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.calc-table thead {
+  background: linear-gradient(135deg, var(--primary-green-light), var(--primary-green));
+  color: white;
+}
+
+.calc-table th {
+  padding: var(--space-lg);
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 700;
+}
+
+.calc-table td {
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--neutral-200);
+  color: var(--neutral-700);
+}
+
+.calc-table tbody tr:hover {
+  background: var(--neutral-50);
+}
+
+.calc-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ───────────────────────────
+   DO & DON'T GRID
+   ─────────────────────────── */
+.do-dont-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+  margin-bottom: var(--space-xl);
+}
+
+.do-card,
+.dont-card {
+  padding: var(--space-xl);
+  border-radius: var(--radius-xl);
+  border: 2px solid;
+}
+
+.do-card {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(16, 185, 129, 0.02));
+  border-color: var(--success);
+}
+
+.dont-card {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(239, 68, 68, 0.02));
+  border-color: var(--error);
+}
+
+.do-card-title,
+.dont-card-title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.do-card-title {
+  color: var(--success);
+}
+
+.dont-card-title {
+  color: var(--error);
+}
+
+.do-card ul,
+.dont-card ul {
+  list-style: none;
+  margin: 0;
+}
+
+.do-card li,
+.dont-card li {
+  padding-left: var(--space-lg);
+  position: relative;
+  margin-bottom: var(--space-sm);
+  color: var(--neutral-700);
+  line-height: 1.7;
+}
+
+.do-card li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--success);
+  font-weight: 800;
+}
+
+.dont-card li::before {
+  content: '✗';
+  position: absolute;
+  left: 0;
+  color: var(--error);
+  font-weight: 800;
+}
+
+/* ───────────────────────────
+   TIMELINE (vertikal)
+   ─────────────────────────── */
+.timeline {
+  position: relative;
+  padding-left: var(--space-2xl);
+  margin-bottom: var(--space-xl);
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, var(--primary-green), var(--primary-green-light));
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: var(--space-2xl);
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--space-2xl) - 6px);
+  top: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background: var(--primary-green);
+  border: 3px solid white;
+  box-shadow: 0 0 0 3px var(--primary-green-light);
+}
+
+.timeline-date {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--primary-green);
+  margin-bottom: var(--space-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.timeline-title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--primary-green-dark);
+  margin-bottom: var(--space-sm);
+}
+
+.timeline-desc {
+  color: var(--neutral-700);
+  line-height: 1.7;
+}
+
+/* ───────────────────────────
+   ACCORDION FAQ
+   ─────────────────────────── */
+.faq-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.faq-item {
+  background: white;
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all var(--transition-base);
+}
+
+.faq-item:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-green-light);
+}
+
+.faq-question {
+  width: 100%;
+  padding: var(--space-lg) var(--space-xl);
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--primary-green-dark);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+  transition: all var(--transition-base);
+}
+
+.faq-question:hover {
+  color: var(--primary-green);
+}
+
+.faq-icon {
+  font-size: var(--text-xl);
+  transition: transform var(--transition-base);
+  flex-shrink: 0;
+}
+
+.faq-item.active .faq-icon {
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-base);
+}
+
+.faq-item.active .faq-answer {
+  max-height: 500px; /* adjust kalau konten panjang */
+}
+
+.faq-answer-content {
+  padding: 0 var(--space-xl) var(--space-lg);
+  color: var(--neutral-700);
+  line-height: 1.8;
+}
+
+/* ───────────────────────────
+   RESPONSIVE
+   =========================== */
+@media (max-width: 768px) {
+  .do-dont-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline {
+    padding-left: var(--space-lg);
+  }
+
+  .calc-table th,
+  .calc-table td {
+    padding: var(--space-md);
+    font-size: var(--text-sm);
+  }
+}

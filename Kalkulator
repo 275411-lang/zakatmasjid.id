@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Zakat Fitrah | Zakat Masjid</title>
+  <link rel="stylesheet" href="asset/css/style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="main-header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <span class="logo-icon">🕌</span>
+          <h1>Zakat Masjid</h1>
+        </div>
+        <nav class="main-nav" aria-label="Navigasi Utama">
+          <a href="Index.html" class="nav-link">Dashboard</a>
+          <a href="Kalkulator" class="nav-link active">Hitung Zakat</a>
+          <a href="masjid.html" class="nav-link">Masjid</a>
+          <a href="edukasi.html" class="nav-link">Panduan</a>
+        </nav>
+        <button class="btn-profile" aria-label="Profil Pengguna">
+          <span class="avatar-small">AZ</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="dashboard-main">
+    <div class="container">
+      
+      <!-- PAGE HEADER -->
+      <div class="page-header">
+        <div class="page-header-text">
+          <h2 class="page-title">Kalkulator Zakat Fitrah</h2>
+          <p class="page-subtitle">Hitung kewajiban zakat fitrah Anda dengan mudah dan akurat</p>
+        </div>
+      </div>
+
+      <!-- CALCULATOR LAYOUT -->
+      <div class="calculator-layout">
+        
+        <!-- CALCULATOR FORM -->
+        <div class="calculator-form-section">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Data Perhitungan</h3>
+            </div>
+            <div class="card-body">
+              <form id="zakatForm">
+                
+                <!-- JUMLAH JIWA -->
+                <div class="form-group">
+                  <label for="jumlahJiwa" class="form-label">
+                    <span class="label-icon">👥</span>
+                    Jumlah Anggota Keluarga
+                  </label>
+                  <div class="input-stepper">
+                    <button type="button" class="stepper-btn" id="decreaseBtn" aria-label="Kurangi">−</button>
+                    <input 
+                      type="number" 
+                      id="jumlahJiwa" 
+                      name="jumlahJiwa"
+                      value="4" 
+                      min="1" 
+                      max="50"
+                      class="stepper-input"
+                      aria-label="Jumlah jiwa"
+                    >
+                    <button type="button" class="stepper-btn" id="increaseBtn" aria-label="Tambah">+</button>
+                  </div>
+                  <span class="form-helper">Masukkan total anggota keluarga yang wajib zakat</span>
+                </div>
+
+                <!-- JENIS ZAKAT -->
+                <div class="form-group">
+                  <label class="form-label">
+                    <span class="label-icon">🌾</span>
+                    Jenis Zakat
+                  </label>
+                  <div class="radio-group">
+                    <label class="radio-card">
+                      <input type="radio" name="jenisZakat" value="beras" checked>
+                      <div class="radio-content">
+                        <span class="radio-icon">🌾</span>
+                        <div class="radio-text">
+                          <div class="radio-title">Beras</div>
+                          <div class="radio-desc">2.5 kg per jiwa</div>
+                        </div>
+                      </div>
+                    </label>
+                    <label class="radio-card">
+                      <input type="radio" name="jenisZakat" value="uang">
+                      <div class="radio-content">
+                        <span class="radio-icon">💰</span>
+                        <div class="radio-text">
+                          <div class="radio-title">Uang</div>
+                          <div class="radio-desc">Setara harga beras</div>
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- HARGA BERAS -->
+                <div class="form-group" id="hargaBerasGroup">
+                  <label for="hargaBeras" class="form-label">
+                    <span class="label-icon">💵</span>
+                    Harga Beras per Kg
+                  </label>
+                  <div class="input-currency">
+                    <span class="currency-symbol">Rp</span>
+                    <input 
+                      type="number" 
+                      id="hargaBeras" 
+                      name="hargaBeras"
+                      value="12000" 
+                      min="1000"
+                      step="500"
+                      aria-label="Harga beras"
+                    >
+                  </div>
+                  <span class="form-helper">Harga beras rata-rata di daerah Anda</span>
+                </div>
+
+                <!-- BUTTON -->
+                <button type="submit" class="btn btn-primary btn-block btn-large">
+                  <span class="btn-icon">🧮</span>
+                  Hitung Zakat
+                </button>
+
+              </form>
+            </div>
+          </div>
+
+          <!-- NIAT ZAKAT -->
+          <div class="card niat-card">
+            <div class="card-header">
+              <h3 class="card-title">Niat Zakat Fitrah</h3>
+            </div>
+            <div class="card-body">
+              <div class="niat-content">
+                <p class="niat-arabic">نَوَيْتُ أَنْ أُخْرِجَ زَكَاةَ الْفِطْرِ عَنْ نَفْسِي فَرْضًا لِلَّهِ تَعَالَى</p>
+                <p class="niat-latin">
+                  <strong>Nawaitu an ukhrija zakaatal fitri 'an nafsi fardhan lilllaahi ta'aalaa</strong>
+                </p>
+                <p class="niat-meaning">
+                  "Aku niat mengeluarkan zakat fitrah untuk diriku, fardu karena Allah Ta'ala."
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RESULT SECTION -->
+        <div class="calculator-result-section">
+          <div class="result-card">
+            <div class="result-header">
+              <h3 class="result-title">Hasil Perhitungan</h3>
+              <span class="result-status" id="resultStatus">Belum Dihitung</span>
+            </div>
+            
+            <div class="result-body" id="resultBody">
+              <div class="result-empty">
+                <span class="empty-icon">📊</span>
+                <p>Silakan isi form dan klik <strong>"Hitung Zakat"</strong> untuk melihat hasil perhitungan</p>
+              </div>
+            </div>
+
+            <!-- RESULT CONTENT (Hidden, shown after calculation) -->
+            <div class="result-content" id="resultContent" style="display: none;">
+              <div class="result-summary">
+                <div class="summary-row">
+                  <span class="summary-label">Jumlah Jiwa</span>
+                  <span class="summary-value" id="displayJiwa">-</span>
+                </div>
+                <div class="summary-row">
+                  <span class="summary-label">Jenis Zakat</span>
+                  <span class="summary-value" id="displayJenis">-</span>
+                </div>
+                <div class="summary-row">
+                  <span class="summary-label">Harga Beras/Kg</span>
+                  <span class="summary-value" id="displayHarga">-</span>
+                </div>
+              </div>
+
+              <div class="result-divider"></div>
+
+              <div class="result-total">
+                <div class="total-item total-primary">
+                  <span class="total-label">Total Zakat (Beras)</span>
+                  <span class="total-value" id="totalBeras">-</span>
+                </div>
+                <div class="total-item total-secondary">
+                  <span class="total-label">Setara Uang</span>
+                  <span class="total-value" id="totalUang">-</span>
+                </div>
+              </div>
+
+              <div class="result-actions">
+                <button class="btn btn-secondary btn-block" id="saveBtn">
+                  <span class="btn-icon">💾</span>
+                  Simpan Perhitungan
+                </button>
+                <a href="masjid.html" class="btn btn-primary btn-block" id="payBtn">
+                  <span class="btn-icon">📍</span>
+                   Tempat Pembayaran Terdekat
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- INFO CARDS -->
+          <div class="info-cards">
+            <div class="info-card-small">
+              <div class="info-card-icon">📏</div>
+              <div class="info-card-content">
+                <h4>Kadar Zakat</h4>
+                <p>2.5 kg beras atau makanan pokok per jiwa</p>
+              </div>
+            </div>
+            <div class="info-card-small">
+              <div class="info-card-icon">⏰</div>
+              <div class="info-card-content">
+                <h4>Waktu Bayar</h4>
+                <p>Mulai awal Ramadan hingga sebelum Salat Idul Fitri</p>
+              </div>
+            </div>
+            <div class="info-card-small">
+              <div class="info-card-icon">🎯</div>
+              <div class="info-card-content">
+                <h4>Penerima</h4>
+                <p>8 golongan yang berhak menerima zakat (mustahiq)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="footer-content">
+        
+        <div class="footer-section">
+          <div class="footer-logo">
+            <span class="logo-icon">🕌</span>
+            <h3>Zakat Masjid</h3>
+          </div>
+          <p class="footer-desc">Platform digital terpercaya untuk memudahkan ibadah zakat fitrah Anda.</p>
+        </div>
+
+        <div class="footer-section">
+          <h4>Layanan</h4>
+          <ul>
+            <li><a href="Kalkulator">Hitung Zakat</a></li>
+            <li><a href="masjid.html">Cari Masjid</a></li>
+            <li><a href="pembayaran.html">Bayar Zakat</a></li>
+            <li><a href="riwayat.html">Riwayat Zakat</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Informasi</h4>
+          <ul>
+            <li><a href="edukasi.html">Panduan Zakat</a></li>
+            <li><a href="tentang.html">Tentang Kami</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="kontak.html">Kontak</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Akun</h4>
+          <ul>
+            <li><a href="profil.html">Profil Saya</a></li>
+            <li><a href="pengaturan.html">Pengaturan</a></li>
+            <li><a href="notifikasi.html">Notifikasi</a></li>
+            <li><a href="logout.html">Keluar</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Zakat Masjid. Memudahkan Ibadah Zakat Anda.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT -->
+  <script src="asset/js/kalkulator.js"></script>
+  <script src="asset/js/nav.js"></script>
+
+</body>
+</html>
